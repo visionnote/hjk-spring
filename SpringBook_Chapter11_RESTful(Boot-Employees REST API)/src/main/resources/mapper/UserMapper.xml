@@ -26,6 +26,7 @@
         DELETE FROM users WHERE id = #{id}
     </delete>
 
+    <!--이름에 의해 검색-->
     <select id="searchUsersByName" resultType="com.example.myapp.model.User">
         SELECT * FROM users
         WHERE name LIKE CONCAT('%', #{name}, '%')
