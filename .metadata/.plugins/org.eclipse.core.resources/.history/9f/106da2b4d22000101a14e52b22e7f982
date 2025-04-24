@@ -1,0 +1,28 @@
+package com.example.myapp.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.ui.Model;
+
+@Controller
+public class FormController {
+
+    // GET 요청: 폼 페이지를 렌더링
+    @GetMapping("/form")
+    public String showForm() {
+        return "form"; // form.jsp 페이지를 렌더링
+    }
+
+    // POST 요청: 폼 데이터 처리
+    @PostMapping("/submit")
+    public String submitForm(@RequestParam String name, @RequestParam String age, Model model) {
+        // 입력된 데이터를 모델에 추가
+        model.addAttribute("name", name);
+        model.addAttribute("age", age);
+
+        // 처리 후 결과 페이지로 이동
+        return "result";
+    }
+}
