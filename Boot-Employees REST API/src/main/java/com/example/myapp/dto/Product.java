@@ -2,26 +2,26 @@ package com.example.myapp.dto;
 
 import java.io.Serializable;
 
-public class Product implements Serializable{
-	
+public class Product implements Serializable {
+
 	private static final long serialVersionUID = -4274700572038677000L;
-	
-	private String productId; //상품 아이디
-	private String pname;	  //상품명 
-	private Integer unitPrice; //상품 가격
-	private String description; //상품 설명 
-	private String manufacture; //제조사
-	private String category;    //분류
-	private long unitsInStock;//재고 수
-	private String condition;
-	
+
+	private String productId; // 상품 아이디
+	private String productName; // 상품명
+	private Integer unitPrice; // 상품 가격
+	private String description; // 상품 설명
+	private String manufacturer; // 제조사 (의미 수정)
+	private String category; // 분류
+	private long unitsInStock; // 재고 수
+	private String condition; // 상태
+
 	public Product() {
 		super();
 	}
-	
-	public Product(String productId, String name, Integer unitPrice) { 
+
+	public Product(String productId, String productName, Integer unitPrice) {
 		this.productId = productId;
-		this.pname = pname;
+		this.productName = productName;
 		this.unitPrice = unitPrice;
 	}
 
@@ -33,12 +33,12 @@ public class Product implements Serializable{
 		this.productId = productId;
 	}
 
-	public String getPname() {
-		return pname;
+	public String getProductName() {
+		return productName;
 	}
 
-	public void setPname(String pname) {
-		this.pname = pname;
+	public void setProductName(String productName) {
+		this.productName = productName;
 	}
 
 	public Integer getUnitPrice() {
@@ -57,12 +57,12 @@ public class Product implements Serializable{
 		this.description = description;
 	}
 
-	public String getManufacture() {
-		return manufacture;
+	public String getManufacturer() {
+		return manufacturer;
 	}
 
-	public void setManufacture(String manufacture) {
-		this.manufacture = manufacture;
+	public void setManufacturer(String manufacturer) {
+		this.manufacturer = manufacturer;
 	}
 
 	public String getCategory() {
@@ -88,9 +88,4 @@ public class Product implements Serializable{
 	public void setCondition(String condition) {
 		this.condition = condition;
 	}
-
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}
-
 }

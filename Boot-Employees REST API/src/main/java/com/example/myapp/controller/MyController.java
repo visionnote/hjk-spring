@@ -20,4 +20,9 @@ public class MyController {
     public String showFirst() {
         return "first"; // → hello.jsp
     }
+
+    @GetMapping("/product")
+    public String showProduct() {
+        return "product"; // → hello.jsp
+    }
 }
