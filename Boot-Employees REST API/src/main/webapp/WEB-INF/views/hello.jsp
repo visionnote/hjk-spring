@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
 <head>
     <title>Hello JSP</title>
@@ -21,6 +22,10 @@
     <h1>Hello from JSP!</h1>
     <h1><%= greeting%></h1>
     <h3><%= tagline%></h3>
+    <c:out value="JSTL Core 태그 라이브러리" /> 
+    <c:forEach var="k" begin="1" end="10" step="1">
+        <c:out value="${k}" />
+    </c:forEach>
     Page Count is 
     <%
      out.println(++count);

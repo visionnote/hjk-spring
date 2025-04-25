@@ -15,4 +15,9 @@ public class MyController {
     public String showPage2() {
         return "welcome"; // → hello.jsp
     }
+
+    @GetMapping("/first")
+    public String showFirst() {
+        return "first"; // → hello.jsp
+    }
 }
