@@ -10,4 +10,9 @@ public class MyController {
     public String showPage() {
         return "hello"; // → hello.jsp
     }
+
+    @GetMapping("/welcome")
+    public String showPage2() {
+        return "welcome"; // → hello.jsp
+    }
 }
