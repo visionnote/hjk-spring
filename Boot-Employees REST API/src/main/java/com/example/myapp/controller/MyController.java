@@ -25,4 +25,9 @@ public class MyController {
     public String showProduct() {
         return "product"; // → hello.jsp
     }
+    
+    @GetMapping("/request")
+    public String showRequest() {
+        return "request"; // → hello.jsp
+    }
 }
