@@ -4,7 +4,7 @@
 	<title>Implicit Objects</title>	
 	</head>
 	<body>
-		<form action="process.jsp" method="post"%>
+		<form action="/process" method="POST">
 		<p>
 			이 름:<input type="text" name="name">
 			<input type="submit" value="전송">

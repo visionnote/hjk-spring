@@ -2,12 +2,12 @@
 <html>
 	<head>
 	<title>Implicit Objects</title>	
+	<!--request.setCharacterEncoding("utf-8");-->
 	</head>
 	<body>
 		<%
-		request.setCharacterEncoding("utf-8");
 		String name = request.getParameter("name");
 		%>
-		<p>이 름:<%=name%>	
+		<p>이 름2:<%=name%>	
 	</body>
 </html>
