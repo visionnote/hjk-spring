@@ -15,22 +15,28 @@ public class MyController {
 
     @GetMapping("/welcome")
     public String showPage2() {
-        return "welcome"; // → hello.jsp
+        return "welcome"; // → welcome.jsp
     }
 
     @GetMapping("/first")
     public String showFirst() {
-        return "first"; // → hello.jsp
+        return "first"; // → first.jsp
     }
-
+    //20250428->20250430 상세 추가 
+    @GetMapping("/products")
+    public String showProducts() {
+        return "products"; // → products.jsp
+    }
+    
+    //20250430
     @GetMapping("/product")
     public String showProduct() {
-        return "product"; // → hello.jsp
+        return "product"; // → product.jsp
     }
     //20250428
     @GetMapping("/request")
     public String showRequest() {
-        return "request"; // → hello.jsp
+        return "request"; // → request.jsp
     }
     //20250428   
     // 수정: /process는 GET과 POST 모두 처리할 수 있게
@@ -42,56 +48,56 @@ public class MyController {
     //20250429
     @GetMapping("/request01")
     public String showRequest01() {
-        return "request01"; // → hello.jsp
+        return "request01"; // → request01.jsp
     }
     
     //20250429
     @GetMapping("/request02")
     public String showRequest02() {
-        return "request02"; // → hello.jsp
+        return "request02"; // → request02.jsp
     }
     //20250429
     @GetMapping("/start")
     public String showStart() {
-        return "start"; // → hello.jsp
+        return "start"; // → start.jsp
     }
     //20250429
     @GetMapping("/move")
     public String showMove() {
-        return "move"; // → hello.jsp
+        return "move"; // → move.jsp
     }
     
     @GetMapping("/forward")
     public String showForward() {
-        return "forward"; // → hello.jsp
+        return "forward"; // → forward.jsp
     }
     @GetMapping("/redirect")
     public String showRedirect() {
-        return "redirect"; // → hello.jsp
+        return "redirect"; // → redirect.jsp
     }
     
     @GetMapping("/response")
     public String showResponse() {
-        return "response"; // → hello.jsp
+        return "response"; // → response.jsp
     }
     
     @GetMapping("/response01")
     public String showResponse01() {
-        return "response01"; // → hello.jsp
+        return "response01"; // → response01.jsp
     }
     
     @PostMapping("/response01_process")
     public String showResponse01_process() {
-        return "response01_process"; // → hello.jsp
+        return "response01_process"; // → response01_process.jsp
     }
     
     @GetMapping("/response01_success")
     public String showResponse01_success() {
-        return "response01_success"; // → hello.jsp
+        return "response01_success"; // → response01_success.jsp
     }
     
     @GetMapping("/response01_failed")
     public String showResponse01_failed() {
-        return "response01_failed"; // → hello.jsp
+        return "response01_failed"; // → response01_failed.jsp
     }
 }
