@@ -2,6 +2,7 @@ package com.example.myapp.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
@@ -67,5 +68,30 @@ public class MyController {
     @GetMapping("/redirect")
     public String showRedirect() {
         return "redirect"; // → hello.jsp
+    }
+    
+    @GetMapping("/response")
+    public String showResponse() {
+        return "response"; // → hello.jsp
+    }
+    
+    @GetMapping("/response01")
+    public String showResponse01() {
+        return "response01"; // → hello.jsp
+    }
+    
+    @PostMapping("/response01_process")
+    public String showResponse01_process() {
+        return "response01_process"; // → hello.jsp
+    }
+    
+    @GetMapping("/response01_success")
+    public String showResponse01_success() {
+        return "response01_success"; // → hello.jsp
+    }
+    
+    @GetMapping("/response01_failed")
+    public String showResponse01_failed() {
+        return "response01_failed"; // → hello.jsp
     }
 }

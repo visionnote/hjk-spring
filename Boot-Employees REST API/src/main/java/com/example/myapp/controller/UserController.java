@@ -1,5 +1,6 @@
 package com.example.myapp.controller;
 
+import com.example.demo.dto.UserDTO;
 import com.example.myapp.mapper.UserMapper;
 import com.example.myapp.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,5 +79,22 @@ public class UserController {
         userMapper.deleteUser(id);
         return "redirect:/users"; // 삭제 후 사용자 목록 페이지로 리다이렉트
     }
+
+    
+	@GetMapping("/login")
+	public String loginGet() {
+		return "login";
+	}
+	
+	@PostMapping("/login")
+	public String loginPost() {
+		return "loginFailed";
+	}
+	
+	
+	@GetMapping("/loginFailed")
+	public String loginFailed() {
+		return "loginFailed";
+	}
 
 }
