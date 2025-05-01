@@ -111,4 +111,17 @@ public class MyController {
     public String showform01_process() {
         return "form01_process"; // → form01_process.jsp
     }
+    
+    //20250501
+    @GetMapping("/addProduct")
+    public String showAddProduct() {
+        return "addProduct"; // → addProduct.jsp
+    }
+    
+    //20250501
+    @PostMapping("/addProduct_process")
+    public String showAddProduct_process() {
+        return "addProduct_process"; // → addProduct_process.jsp
+    }
+
 }
