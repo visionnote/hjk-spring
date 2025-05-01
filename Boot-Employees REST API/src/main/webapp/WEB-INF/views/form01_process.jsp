@@ -26,7 +26,6 @@
 		<p>이름:<%=name%>
 		<p>연락처:<%=phone1%>-<%=phone2%>-<%=phone3%>
 		<p>성별:<%=sex%>
-    	<p>취미:<%-- <%=hobby1%><%=hobby2%><%=hobby3%> --%>
 	    <p>취미 : <%
 			if(hobby != null) {
 				for(int i = 0; i<hobby.length; i++)  {
@@ -34,6 +33,7 @@
 				}
 			}
 			%>
+			<br>
 			<%
 			String[] hobbies = request.getParameterValues("hobby");
 			if (hobbies != null) {
@@ -55,23 +55,21 @@
 			 Enumeration paramNames = request.getParameterNames();
 			 
 			 while(paramNames.hasMoreElements()){
+				
 				String name2 = (String) paramNames.nextElement();
+				if(!name2.equals("hobby")) {
 				out.print("<tr><td>"+name2+" </td>\n");
 				
 				String paramValue = request.getParameter(name2);
 
 				out.println("<td> "+paramValue+"</td></tr>\n");
-				
-			 }
-			%>
-			<%
-			if(hobby != null) {
-											for(int i = 0; i<hobby.length; i++)  {
-												out.println("<tr><td>"+"취미"+i+"</td>\n"+"<td>"+hobby[i]+"</td></tr>\n");
-											}
-										}
-			%>
-			
+				}
+				else 
+				for(int i = 0; i<hobby.length; i++)  {
+								out.println("<tr><td>"+"hobby["+i+"]"+"</td>\n"+"<td>"+hobby[i]+"</td></tr>\n");
+				}
+			}
+			%>		
 			</table>
 </body>
 </html>			
