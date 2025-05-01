@@ -100,4 +100,15 @@ public class MyController {
     public String showResponse01_failed() {
         return "response01_failed"; // → response01_failed.jsp
     }
+    //20250501
+    @GetMapping("/form01")
+    public String showform01() {
+        return "form01"; // → form01.jsp
+    }
+    
+  //20250501
+    @PostMapping("/form01_process")
+    public String showform01_process() {
+        return "form01_process"; // → form01_process.jsp
+    }
 }
