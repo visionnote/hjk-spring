@@ -3,7 +3,7 @@
 <%@ page import="com.example.myapp.dto.Product" %>
 <jsp:useBean id="productDAO" class="com.example.myapp.dao.ProductRepository" scope="session"/>
 <html>
-    <head>
+    <head> 
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
         <title>상품 목록</title>
     </head>
@@ -14,7 +14,7 @@
             <h1 class="display-3">상품 목록</h1>
         </div>
    </div>
-   <%
+   <% 
         ArrayList<Product> listOfProducts = productDAO.getAllProducts();
     %>
     <div class="container">
@@ -27,8 +27,18 @@
                 <h3><%=product.getProductName() %></h3>
                 <p><%=product.getDescription()%></p>
                 <p><%=product.getUnitPrice()%>원</p>
-				<p><a href="./product"?id=<%=product.getProductId()%>"
-					class="btn btn-secondary" role="button">상세 정보&raquo;></a>
+				<%
+				    if (product != null) {
+				%>		
+				    <p><a href="./product?id=<%=product.getProductId()%>" class="btn btn-secondary" role="button">
+				        상세 정보 &raquo;
+				    </a></p>
+				<%
+				    } else {
+				        out.println("product 객체가 전달되지 않았습니다.");
+				    }
+				%>
+
             </div>
             <%   
                 }
