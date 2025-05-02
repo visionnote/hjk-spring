@@ -113,15 +113,15 @@ public class MyController {
     }
     
     //20250502 
-    @GetMapping("/fileupload01")
-    public String showfileupload01() {
-        return "fileupload01"; // → fileupload01.jsp
+    @GetMapping("/fileupload03")
+    public String showfileupload03() {
+        return "fileupload03"; // → fileupload01.jsp
     }
     
     //20250502
-    @PostMapping("/fileupload01_process")
-    public String showfileupload01_process() {
-        return "fileupload01_process"; // → fileupload01_process.jsp
+    @PostMapping("/fileupload03_process")
+    public String showfileupload03_process() {
+        return "fileupload03_process"; // → fileupload01_process.jsp
     }
     
     
