@@ -7,6 +7,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -22,6 +23,9 @@ import jakarta.servlet.http.HttpServletRequest;
 
 @Controller
 public class FileUploadController {
+	
+	@Autowired
+	private UploadedFileRepository fileRepository;
 	
 	@GetMapping("/upload_form")
 	public String showUploadForm() {
@@ -42,6 +46,10 @@ public class FileUploadController {
             String filePath = uploadPath + File.separator + file.getOriginalFilename();
             file.transferTo(new File(filePath));
             uploadedFileNames.add(file.getOriginalFilename());
+            
+            UploadedFile saved = new UploadedFile();
+            saved.setFileName(file.getOriginalFilename());
+            fileRepository.save(saved);
             //request.setAttribute("fileName", file.getOriginalFilename());
             	}
             }
@@ -72,20 +80,22 @@ public class FileUploadController {
     
     @GetMapping("/files")
     public String listFiles(HttpServletRequest request) {
-        String uploadDir = "C:/upload";
-        File folder = new File(uploadDir);
-        File[] files = folder.listFiles();
+//        String uploadDir = "C:/upload";
+//        File folder = new File(uploadDir);
+//        File[] files = folder.listFiles();
+//
+//        List<String> fileNames = new ArrayList<>();
+//        if (files != null) {
+//            for (File file : files) {
+//                if (file.isFile()) {
+//                    fileNames.add(file.getName());
+//                }
+//            }
+//        }
+    	 List<UploadedFile> files = fileRepository.findAll();
 
-        List<String> fileNames = new ArrayList<>();
-        if (files != null) {
-            for (File file : files) {
-                if (file.isFile()) {
-                    fileNames.add(file.getName());
-                }
-            }
-        }
-
-        request.setAttribute("fileList", fileNames);
+//         request.setAttribute("fileList", fileNames);
+         request.setAttribute("fileList", files);
         return "file_list";
     }
 
@@ -97,8 +107,11 @@ public class FileUploadController {
         if (file.exists()) {
             file.delete();
         }
+        
+        UploadedFile uploaded = fileRepository.findByFileName(fileName);
+        if (uploaded != null) fileRepository.delete(uploaded);
+        
         return "redirect:/files";  // 삭제 후 목록 페이지로 리다이렉트
     }
-
     
 }
