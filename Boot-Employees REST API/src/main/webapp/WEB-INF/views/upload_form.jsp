@@ -6,7 +6,7 @@
 <body>
 <h2>파일 업로드</h2>
 <form method="post" action="/upload_result" enctype="multipart/form-data">
-    <input type="file" name="file"/>
+    <input type="file" name="files" multiple/>
     <input type="submit" value="업로드"/>
 </form>
 </body>

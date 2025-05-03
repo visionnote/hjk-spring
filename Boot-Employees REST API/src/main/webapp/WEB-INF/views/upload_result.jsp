@@ -1,11 +1,23 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="java.util.List"%>
 <html>
 <head>
     <title>업로드 결과</title>
 </head>
 <body>
-<h2>업로드 완료</h2>
-<p>업로드된 파일 이름: ${fileName}</p>
-<a href="/upload_form">다시 업로드하기</a>
+<h2>업로드된 파일 목록</h2>
+<% 
+  List<String> uploadedFiles = (List<String>) request.getAttribute("uploadedFiles");
+  if(uploadedFiles != null && !uploadedFiles.isEmpty()) {
+ %>
+   <ul>
+	<% for (String fileName : uploadedFiles) { %>
+	<li><%=fileName %></li>
+	<% } %>
+   </ul>
+   <% } else { %>
+       <p>업로드된 파일이 없습니다.</p>
+   <% } %>
+   <a href="/upload_form">다시 업로드하기</a>
 </body>
 </html>
