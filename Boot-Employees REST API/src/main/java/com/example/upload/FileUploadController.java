@@ -69,4 +69,36 @@ public class FileUploadController {
                 .contentType(MediaType.APPLICATION_OCTET_STREAM)
                 .body(resource);
     }
+    
+    @GetMapping("/files")
+    public String listFiles(HttpServletRequest request) {
+        String uploadDir = "C:/upload";
+        File folder = new File(uploadDir);
+        File[] files = folder.listFiles();
+
+        List<String> fileNames = new ArrayList<>();
+        if (files != null) {
+            for (File file : files) {
+                if (file.isFile()) {
+                    fileNames.add(file.getName());
+                }
+            }
+        }
+
+        request.setAttribute("fileList", fileNames);
+        return "file_list";
+    }
+
+    @PostMapping("/delete")
+    public String deleteFile(@RequestParam("filename") String fileName,
+                             HttpServletRequest request) {
+        String uploadDir = "C:/upload";
+        File file = new File(uploadDir, fileName);
+        if (file.exists()) {
+            file.delete();
+        }
+        return "redirect:/files";  // 삭제 후 목록 페이지로 리다이렉트
+    }
+
+    
 }
