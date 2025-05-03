@@ -13,8 +13,19 @@
    <ul>
 	<% for (String fileName : uploadedFiles) { %>
 	<li><%=fileName %></li>
+	<li>
+	     <a href="/download?filename=<%= fileName %>"><%= fileName %> 다운로드</a>
+	 </li>
 	<% } %>
    </ul>
+   <ul>
+       <% for (String fileName : uploadedFiles) { %>
+           <li>
+               <a href="/download?filename=<%= fileName %>"><%= fileName %> 다운로드</a>
+           </li>
+       <% } %>
+   </ul>
+
    <% } else { %>
        <p>업로드된 파일이 없습니다.</p>
    <% } %>
