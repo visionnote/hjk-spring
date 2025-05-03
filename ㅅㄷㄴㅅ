@@ -1,0 +1,265 @@
+✅ 1. DB 테이블 생성 (Oracle 기준)
+sql
+복사
+편집
+CREATE TABLE uploaded_file (
+    id NUMBER PRIMARY KEY,
+    file_name VARCHAR2(255),
+    uploaded_at TIMESTAMP DEFAULT SYSTIMESTAMP
+);
+CREATE SEQUENCE uploaded_file_seq START WITH 1 INCREMENT BY 1;
+✅ 2. Entity 클래스 생성
+java
+복사
+편집
+package com.example.upload;
+
+import jakarta.persistence.*;
+import java.time.LocalDateTime;
+
+@Entity
+public class UploadedFile {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "file_seq_gen")
+    @SequenceGenerator(name = "file_seq_gen", sequenceName = "uploaded_file_seq", allocationSize = 1)
+    private Long id;
+
+    private String fileName;
+
+    private LocalDateTime uploadedAt = LocalDateTime.now();
+
+    // Getters and setters
+}
+✅ 3. Repository 생성
+java
+복사
+편집
+package com.example.upload;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface UploadedFileRepository extends JpaRepository<UploadedFile, Long> {
+    UploadedFile findByFileName(String fileName);
+}
+✅ 4. application.properties에 JPA 설정 추가
+properties
+복사
+편집
+spring.datasource.url=jdbc:oracle:thin:@localhost:1521:xe
+spring.datasource.username=your_username
+spring.datasource.password=your_password
+spring.datasource.driver-class-name=oracle.jdbc.OracleDriver
+
+spring.jpa.hibernate.ddl-auto=none
+spring.jpa.show-sql=true
+✅ 5. 컨트롤러 업로드 및 목록 조회 로직 수정
+🔹 업로드 시 DB 저장
+java
+복사
+편집
+@Autowired
+private UploadedFileRepository fileRepository;
+
+@PostMapping("/upload")
+public String handleUpload(@RequestParam("files") MultipartFile[] files,
+                           HttpServletRequest request) throws IOException {
+    String uploadPath = "C:/upload";
+    File uploadDir = new File(uploadPath);
+    if (!uploadDir.exists()) uploadDir.mkdirs();
+
+    List<String> uploadedFileNames = new ArrayList<>();
+    for (MultipartFile file : files) {
+        if (!file.isEmpty()) {
+            String fileName = file.getOriginalFilename();
+            file.transferTo(new File(uploadPath + File.separator + fileName));
+            uploadedFileNames.add(fileName);
+
+            UploadedFile saved = new UploadedFile();
+            saved.setFileName(fileName);
+            fileRepository.save(saved);
+        }
+    }
+
+    request.setAttribute("uploadedFiles", uploadedFileNames);
+    return "upload_result";
+}
+🔹 목록은 DB에서 조회
+java
+복사
+편집
+@GetMapping("/files")
+public String listFilesFromDB(HttpServletRequest request) {
+    List<UploadedFile> files = fileRepository.findAll();
+    request.setAttribute("fileList", files);
+    return "file_list";
+}
+✅ 6. JSP 수정 (DB에서 조회한 객체 사용)
+file_list.jsp 수정:
+
+jsp
+복사
+편집
+<%@ page import="java.util.List" %>
+<%@ page import="com.example.upload.UploadedFile" %>
+<%
+    List<UploadedFile> fileList = (List<UploadedFile>) request.getAttribute("fileList");
+%>
+<table border="1" cellpadding="5">
+    <tr>
+        <th>파일명</th>
+        <th>업로드 시간</th>
+        <th>다운로드</th>
+        <th>삭제</th>
+    </tr>
+    <% for (UploadedFile file : fileList) { %>
+        <tr>
+            <td><%= file.getFileName() %></td>
+            <td><%= file.getUploadedAt() %></td>
+            <td><a href="/download?filename=<%= file.getFileName() %>">다운로드</a></td>
+            <td>
+                <form method="post" action="/delete">
+                    <input type="hidden" name="filename" value="<%= file.getFileName() %>"/>
+                    <button type="submit">삭제</button>
+                </form>
+            </td>
+        </tr>
+    <% } %>
+</table>
+✅ 7. 삭제 시 DB에서도 제거
+java
+복사
+편집
+@PostMapping("/delete")
+public String deleteFile(@RequestParam("filename") String fileName) {
+    String uploadPath = "C:/upload";
+    File file = new File(uploadPath, fileName);
+    if (file.exists()) file.delete();
+
+    UploadedFile uploaded = fileRepository.findByFileName(fileName);
+    if (uploaded != null) fileRepository.delete(uploaded);
+
+    return "redirect:/files";
+}
+✅ 완성된 기능 흐름
+업로드 시: 파일 저장 + DB 저장
+
+목록 보기: DB에서 조회하여 표시
+
+삭제 시: 실제 파일 + DB 둘 다 제거
+
+이제 DB 기반으로 파일 정보를 관리하는 구조가 완성되었습니다.
+추가로 "사용자별 파일 관리"나 "파일 썸네일 미리보기" 같은 기능도 확장 가능합니다.
+
+원하시는 다음 확장 방향이 있으실까요?
+
+
+
+
+
+
+
+나의 말:
+"파일 썸네일 미리보기" 기능으로 확장해줘
+ChatGPT의 말:
+좋습니다! 이번에는 업로드된 **이미지 파일(jpg, png 등)**에 대해 썸네일 미리보기 기능을 추가해 보겠습니다.
+
+✅ 목표
+파일 목록에서 이미지 파일이면 썸네일을 표시
+
+그 외 일반 파일은 다운로드 링크만 표시
+
+이미지 경로는 /files/image?filename=xxx.jpg 같은 URL로 접근 가능하도록 설정
+
+✅ 1. 이미지 출력용 Controller 추가
+FileUploadController.java에 썸네일 출력용 메서드를 추가합니다:
+
+java
+복사
+편집
+@GetMapping("/files/image")
+public ResponseEntity<Resource> serveImage(@RequestParam("filename") String fileName) throws IOException {
+    String uploadDir = "C:/upload";
+    File file = new File(uploadDir, fileName);
+
+    if (!file.exists()) {
+        return ResponseEntity.notFound().build();
+    }
+
+    String contentType = Files.probeContentType(file.toPath());
+    if (contentType == null || !contentType.startsWith("image")) {
+        return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE).build();
+    }
+
+    Resource resource = new InputStreamResource(new FileInputStream(file));
+    return ResponseEntity.ok()
+            .contentType(MediaType.parseMediaType(contentType))
+            .body(resource);
+}
+✅ 2. JSP 파일 수정 (file_list.jsp)
+썸네일 이미지 출력 조건을 추가합니다:
+
+jsp
+복사
+편집
+<%@ page import="java.util.List" %>
+<%@ page import="com.example.upload.UploadedFile" %>
+<%
+    List<UploadedFile> fileList = (List<UploadedFile>) request.getAttribute("fileList");
+
+    // 썸네일로 보여줄 확장자 정의
+    String[] imageExtensions = {".jpg", ".jpeg", ".png", ".gif", ".bmp"};
+%>
+<table border="1" cellpadding="5">
+    <tr>
+        <th>파일명</th>
+        <th>미리보기</th>
+        <th>다운로드</th>
+        <th>삭제</th>
+    </tr>
+    <% for (UploadedFile file : fileList) {
+        String fileName = file.getFileName().toLowerCase();
+        boolean isImage = false;
+        for (String ext : imageExtensions) {
+            if (fileName.endsWith(ext)) {
+                isImage = true;
+                break;
+            }
+        }
+    %>
+    <tr>
+        <td><%= file.getFileName() %></td>
+        <td>
+            <% if (isImage) { %>
+                <img src="/files/image?filename=<%= file.getFileName() %>" width="100" height="100" />
+            <% } else { %>
+                (이미지 아님)
+            <% } %>
+        </td>
+        <td><a href="/download?filename=<%= file.getFileName() %>">다운로드</a></td>
+        <td>
+            <form method="post" action="/delete">
+                <input type="hidden" name="filename" value="<%= file.getFileName() %>"/>
+                <button type="submit">삭제</button>
+            </form>
+        </td>
+    </tr>
+    <% } %>
+</table>
+✅ 3. 테스트 방법
+/ 경로에서 이미지 파일 업로드 (.jpg, .png, .gif 등)
+
+/files 목록 페이지에서 썸네일이 보이는지 확인
+
+이미지가 아닌 파일은 “(이미지 아님)”으로 표시됨
+
+✅ 추가 개선 가능 항목
+썸네일 리사이징 처리 (현재는 원본 이미지 크기를 그대로 보여줌)
+
+이미지 클릭 시 원본 보기 or 라이트박스 효과
+
+썸네일 전용 캐시 폴더 생성 (성능 최적화)
+
+이제 파일 목록에 썸네일 미리보기가 포함된 완성형 업로드 관리 기능이 구현되었습니다.
+다음으로 확장하고 싶은 부분이 있을까요?
+예: 사용자별 파일 분리 저장, 썸네일 캐시 처리, AJAX 업로드 등

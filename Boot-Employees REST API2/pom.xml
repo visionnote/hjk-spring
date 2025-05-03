@@ -5,14 +5,14 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.4.5</version>
+		<version>3.4.4</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.example</groupId>
 	<artifactId>myapp</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<!--<packaging>jar</packaging> -->
-	<packaging>jar</packaging>
+	<packaging>war</packaging>
 	<name>myapp</name>
 	<description>SpringBook_Chapter11_RESTful(Boot-Employees REST API)</description>
 	<url/>
@@ -51,7 +51,7 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-tomcat</artifactId>
-<!--			<scope>provided</scope>-->
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -91,7 +91,6 @@
         <artifactId>tomcat-embed-jasper</artifactId>
     </dependency>
 
-	
 
     <!-- Servlet API (제공만, 직접 포함 X) -->
     <dependency>
@@ -103,11 +102,13 @@
 	<dependency>
 	    <groupId>jakarta.servlet.jsp.jstl</groupId>
 	    <artifactId>jakarta.servlet.jsp.jstl-api</artifactId>
+	    <version>3.0.0</version>
 	</dependency>
 	
 	<dependency>
 	    <groupId>org.glassfish.web</groupId>
 	    <artifactId>jakarta.servlet.jsp.jstl</artifactId>
+	    <version>3.0.1</version>
 	</dependency>
 	
 	<dependency><!--20250502-->
@@ -116,7 +117,7 @@
 	  <version>4.0.1</version> <!-- 혹은 사용 중인 톰캣 버전에 맞게 -->
 	  <scope>provided</scope>
 	</dependency>
-	
+
 	</dependencies>
 
 	<build>

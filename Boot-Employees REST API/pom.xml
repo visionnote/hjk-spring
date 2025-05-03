@@ -117,13 +117,6 @@
 	  <version>4.0.1</version> <!-- 혹은 사용 중인 톰캣 버전에 맞게 -->
 	  <scope>provided</scope>
 	</dependency>
-	
-	<dependency>
-    <groupId>com.oreilly.servlet</groupId>
-    <artifactId>cos</artifactId>
-    <version>20.12</version>
-	</dependency>
-
 
 	</dependencies>
 
