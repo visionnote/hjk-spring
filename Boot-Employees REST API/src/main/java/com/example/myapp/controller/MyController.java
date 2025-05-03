@@ -7,6 +7,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class MyController {
+	
+	 @GetMapping("/")
+	    public String home() {
+	        return "products"; // JSP 파일 이름 (예: /WEB-INF/views/upload_form.jsp)
+	    }
+
 
     @GetMapping("/hello")
     public String showPage() {

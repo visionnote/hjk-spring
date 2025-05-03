@@ -91,7 +91,6 @@
         <artifactId>tomcat-embed-jasper</artifactId>
     </dependency>
 
-	
 
     <!-- Servlet API (제공만, 직접 포함 X) -->
     <dependency>
@@ -123,7 +122,7 @@
     <groupId>com.oreilly.servlet</groupId>
     <artifactId>cos</artifactId>
     <version>20.12</version>
-</dependency>
+	</dependency>
 
 
 	</dependencies>
