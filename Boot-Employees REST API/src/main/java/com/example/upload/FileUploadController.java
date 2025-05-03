@@ -1,16 +1,20 @@
 package com.example.upload;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -112,6 +116,26 @@ public class FileUploadController {
         if (uploaded != null) fileRepository.delete(uploaded);
         
         return "redirect:/files";  // 삭제 후 목록 페이지로 리다이렉트
+    }
+    
+    @GetMapping("/files/image")
+    public ResponseEntity<Resource> serveImage(@RequestParam("filename") String fileName) throws IOException {
+        String uploadDir = "C:/upload";
+        File file = new File(uploadDir, fileName);
+
+        if (!file.exists()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        String contentType = Files.probeContentType(file.toPath());
+        if (contentType == null || !contentType.startsWith("image")) {
+            return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE).build();
+        }
+
+        Resource resource = new InputStreamResource(new FileInputStream(file));
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(contentType))
+                .body(resource);
     }
     
 }
