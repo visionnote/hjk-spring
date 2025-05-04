@@ -6,7 +6,8 @@
 <jsp:useBean id="productDAO" class="com.example.myapp.dao.ProductRepository" scope="session"/>
 <html>
     <head> 
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+<!--		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">-->
+		<link rel="stylesheet" href="/css/bootstrap.min.css">
         <title>상품 목록</title>
     </head>
 </html>
@@ -27,6 +28,7 @@
                 Product product = listOfProducts.get(i);
             %>
             <div class="col-md-4">
+				<img src="/images/<%=product.getFilename()%>" alt="제품 이미지" style="width: 100%">
                 <h3><%=product.getProductName() %></h3>
                 <p><%=product.getDescription()%></p>
                 <p><%=product.getUnitPrice()%>원</p>
