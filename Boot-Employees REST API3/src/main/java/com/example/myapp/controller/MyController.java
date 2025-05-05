@@ -247,13 +247,22 @@ public class MyController {
 		// 상품 삭제
 		productRepository.deleteProduct(productId);
 		
-		// 썸네일 및 원본 이미지 삭제
+		// 1. 썸네일 및 원본 이미지 삭제
 		String originalPath = "src/main/resources/static/images/" + filename;
 		
      	File originalFile = new File(originalPath);
 
 		if (originalFile.exists()) {
-		originalFile.delete(); // 원본 파일 삭제
+			originalFile.delete(); // 원본 파일 삭제
+		}    
+		
+		// 2. 썸네일 이미지 삭제 
+		String thumbPath = "src/main/resources/static/images/" + "thumb_" + filename;
+		
+     	File thumbFile = new File(thumbPath);
+
+		if (thumbFile.exists()) {
+			thumbFile.delete(); // 원본 파일 삭제
 		}    
     
         return "success";  // JSON 형식으로 성공 메시지 전달
@@ -296,6 +305,15 @@ public class MyController {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            
+         // 3. 썸네일 생성
+            File thumbFile = new File(uploadDir, "thumb_" + fileName);
+            try {
+				createThumbnail(saveFile, thumbFile, 50, 50);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} // 썸네일 크기: 200x200
         }
 
         // 상품 객체 생성
@@ -314,6 +332,26 @@ public class MyController {
 
         return "redirect:/products";
     }
+    
+    private void createThumbnail(File originalFile, File thumbnailFile, int width, int height) throws IOException {
+        BufferedImage originalImage = ImageIO.read(originalFile);
+        if (originalImage == null) return;
+
+        Image scaledImage = originalImage.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+        BufferedImage bufferedThumb = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+        Graphics2D g2d = bufferedThumb.createGraphics();
+        g2d.drawImage(scaledImage, 0, 0, null);
+        g2d.dispose();
+
+        String extension = getFileExtension(thumbnailFile.getName());
+        ImageIO.write(bufferedThumb, extension, thumbnailFile);
+    }
+
+    private String getFileExtension(String fileName) {
+        int dotIndex = fileName.lastIndexOf('.');
+        return dotIndex >= 0 ? fileName.substring(dotIndex + 1) : "jpg";
+    }
+
 
     //20250505 추가 
     @GetMapping("/editProduct")

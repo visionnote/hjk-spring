@@ -55,7 +55,7 @@
 		<%-- 상품 수정 시 기존 이미지를 표시 --%>
 		<% if (product.getFilename() != null && !product.getFilename().isEmpty()) { %>
 		    <img src="<%= request.getContextPath() %>/images/thumb_<%= product.getFilename() %>" 
-		         alt="기존 썸네일" style="max-width: 200px;">
+		         alt="기존 썸네일" style="max-width: 50px;">
 		    <input type="hidden" name="existingFile" value="<%= product.getFilename() %>">
 		<% } %>
         <button type="submit" class="btn btn-primary">저장</button>

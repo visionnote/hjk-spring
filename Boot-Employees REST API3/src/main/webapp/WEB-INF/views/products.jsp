@@ -31,6 +31,12 @@
             <img src="<%= request.getContextPath() %>/images/<%= product.getFilename() %>"
                  alt="제품 이미지"
                  style="width: 100%; height: 250px; object-fit: cover;">
+				 
+    		<img src="<%= request.getContextPath() %>/images/thumb_<%= product.getFilename() %>"
+				      alt="제품 썸네일"
+				      style="width: 50px; height: 50px; object-fit: cover;"
+				      onerror="this.onerror=null; this.src='<%= request.getContextPath() %>/images/default.png';">
+	 
             <h3><%= product.getProductName() %></h3>
             <p><%= product.getDescription() %></p>
             <p><strong><%= product.getUnitPrice() %>원</strong></p>
