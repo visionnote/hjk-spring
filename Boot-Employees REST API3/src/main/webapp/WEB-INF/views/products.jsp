@@ -17,6 +17,9 @@
 <div class="jumbotron">
     <div class="container">
         <h1 class="display-3">상품 목록</h1>
+        <a href="<%= request.getContextPath() %>/addProduct" class="btn btn-primary mt-3">
+            신규 상품 등록
+        </a>
     </div>
 </div>
 

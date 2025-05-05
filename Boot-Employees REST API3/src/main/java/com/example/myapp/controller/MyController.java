@@ -208,8 +208,13 @@ public class MyController {
     public String showfileupload03_process() {
         return "fileupload03_process"; // → fileupload01_process.jsp
     }
-    
-    
+
+    //20250505
+    @GetMapping("/home")
+    public String showHome() {
+        return "home"; // home.jsp를 렌더링
+    }
+
     //20250501
     @GetMapping("/addProduct")
     public String showAddProduct() {
