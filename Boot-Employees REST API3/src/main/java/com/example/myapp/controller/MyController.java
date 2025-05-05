@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.example.myapp.dao.ProductMapper;
 import com.example.myapp.dao.ProductRepository;
 import com.example.myapp.dto.Product;
 
@@ -50,39 +48,70 @@ public class MyController {
         File uploadDir = new File(request.getServletContext().getRealPath("/uploads"));
         File[] files = uploadDir.listFiles();
         model.addAttribute("files", files);
-//        model.addAttribute("listOfProducts", productRepository.getAllProducts());
-        
-        List<Product> products = productMapper.getAllProducts(); // 🗂 DB에서 조회
-        model.addAttribute("products", products);
-        
+        model.addAttribute("listOfProducts", productRepository.getAllProducts());
+        model.addAttribute("productList", productRepository.getAllProducts());
         return "products"; // → products.jsp
     }
 
     @PostMapping("/products")
     public String addProduct(
             @RequestParam("productName") String productName,
+            @RequestParam("unitPrice") int unitPrice,
+            @RequestParam("description") String description,
+            @RequestParam("manufacturer") String manufacturer,
+            @RequestParam("category") String category,
+            @RequestParam("unitsInStock") long unitsInStock,
+            @RequestParam("condition") String condition,
             @RequestParam("fileName") MultipartFile fileName,
-            HttpServletRequest request,
-            Model model) throws IOException {
+            HttpServletRequest request) throws IOException {
 
+        String fileName2 = "";
         if (!fileName.isEmpty()) {
-            String fileName2 = UUID.randomUUID() + "_" + fileName.getOriginalFilename();
+            fileName2 = UUID.randomUUID() + "_" + fileName.getOriginalFilename();
             String uploadPath = request.getServletContext().getRealPath("/uploads");
             Path savePath = Paths.get(uploadPath, fileName2);
             Files.createDirectories(savePath.getParent());
             Files.write(savePath, fileName.getBytes());
-
-            model.addAttribute("filename", "/uploads/" + fileName2); // fileName이 아니라 fileName2 사용
         }
 
-        model.addAttribute("productName", productName);
-        return "redirect:/products"; // 제품 등록 후 목록으로 리다이렉트
+        String productId = "PRD-" + UUID.randomUUID().toString().substring(0, 8);
+
+        Product product = new Product();
+        product.setProductId(productId);
+        product.setProductName(productName);
+        product.setDescription(description);
+        product.setUnitPrice(unitPrice);
+        product.setManufacturer(manufacturer);
+        product.setCategory(category);
+        product.setUnitsInStock(unitsInStock);
+        product.setCondition(condition);
+        product.setFilename(fileName2);
+
+        productRepository.addProduct(product);
+
+        return "redirect:/products";
     }
+    
     //20250430
     @GetMapping("/product")
-    public String showProduct() {
-        return "product"; // → product.jsp
+    public String getProduct(@RequestParam("id") String id, Model model) {
+    	System.out.println("요청 ID: " + id);
+        
+//        Product product = new Product();
+//        product.setProductId(id);
+//        product.setProductName("테스트 상품");
+//        product.setDescription("테스트 설명");
+//        product.setUnitPrice(10000);
+        
+        Product product = productRepository.getProductById(id);
+        System.out.println("조회된 상품: " + product); 
+        model.addAttribute("product", product);
+        
+        //20250505 추가하기 
+        model.addAttribute("id", id); // ✅ id도 모델에 추가
+        return "product"; // => /WEB-INF/views/product.jsp 로 이동
     }
+    
     //20250428
     @GetMapping("/request")
     public String showRequest() {
@@ -210,12 +239,9 @@ public class MyController {
         productRepository.deleteProduct(productId);
         return "redirect:/products";
     }
-    @Autowired
-    private ProductMapper productMapper;
     
     @PostMapping("/addProduct_process")
     public String handleUpload(@RequestParam("filename") MultipartFile file,
-                               @RequestParam("productId") String productId,
                                @RequestParam("productName") String productName,
                                @RequestParam("unitPrice") int unitPrice,
                                @RequestParam("description") String description,
@@ -223,35 +249,33 @@ public class MyController {
                                @RequestParam("category") String category,
                                @RequestParam("unitsInStock") long unitsInStock,
                                @RequestParam("condition") String condition,
-                               Model model) throws IOException {
+    								HttpServletRequest request) { 
+
         String fileName = "";
         if (!file.isEmpty()) {
-            fileName = file.getOriginalFilename();
-            System.out.println("파일명: " +"여기" + file.getOriginalFilename());
-//            String uploadDir = new File("uploads").getAbsolutePath();
-            String uploadDir = "F:\\dev_0420_009\\dev\\workspace\\Boot-Employees REST API\\src\\main\\resources\\static\\uploads";
-            File saveFile = new File(uploadDir, fileName);
+            fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
+            String uploadDir = new File("src/main/resources/static/images").getAbsolutePath();
+            //String uploadDir = "F:\\dev_0420_009\\dev\\workspace\\Boot-Employees REST API\\src\\main\\resources\\static\\images";
+            // 📌 실제 저장 폴더 경로 (static/images)
+            //String uploadDir = request.getServletContext().getRealPath("/images");
             
-            String uploadDir2 = "F:\\dev_0420_009\\dev\\workspace\\Boot-Employees REST API\\src\\main\\resources\\static\\images";
-            File saveFile2 = new File(uploadDir2, fileName);
-            byte[] bytes = file.getBytes();
-            try {
-                //file.transferTo(saveFile);
-            	Files.write(saveFile.toPath(), bytes);
-            } catch (IOException e) {
-                e.printStackTrace();
+         // 📁 폴더 없으면 생성
+            File saveFolder = new File(uploadDir);
+            if (!saveFolder.exists()) {
+                saveFolder.mkdirs();
             }
             
+         // 📥 이미지 저장
+            File saveFile = new File(uploadDir, fileName);
             try {
-                //file.transferTo(saveFile2); 
-            	Files.write(saveFile2.toPath(), bytes);
+                file.transferTo(saveFile);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
 
         Product product = new Product();
-        product.setProductId(productId);
+        product.setProductId("P" + UUID.randomUUID().toString().substring(0, 8)); // 자동 생성 ID
         product.setProductName(productName);
         product.setUnitPrice(unitPrice);
         product.setDescription(description);
@@ -261,17 +285,9 @@ public class MyController {
         product.setCondition(condition);
         product.setFilename(fileName);
 
-        productMapper.insertProduct(product); // 💾 DB 저장
-        // TODO: DB 저장 로직 작성
-     // ✅ 누락된 부분: 상품 저장
-        ProductRepository.getInstance().addProduct(product);
+        productRepository.addProduct(product);
 
-        model.addAttribute("product", product);
-        //return "products"; // 등록 완료 페이지 (예시)
-        
-        // ✅ 목록 페이지로 리디렉션
-        return "redirect:/products"; 
+        return "redirect:/products";
     }
-
 
 }
