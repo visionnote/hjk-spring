@@ -1,6 +1,7 @@
 <%@ page contentType="text/html; charset=utf-8" %>
 <%@ page import="java.util.List" %>
 <%@ page import="com.example.myapp.dto.Product" %>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <%
     List<Product> listOfProducts = (List<Product>) request.getAttribute("listOfProducts");
 %>
@@ -37,14 +38,17 @@
                 <a href="<%= request.getContextPath() %>/product?id=<%= product.getProductId() %>"
                    class="btn btn-secondary btn-sm">상세 정보 &raquo;</a>
 
-                <form action="/deleteProduct" method="post" style="display:inline;">
-                    <input type="hidden" name="productId" value="<%= product.getProductId() %>">
-                    <button type="submit" class="btn btn-danger btn-sm">삭제</button>
-                </form>
+<!--                <form action="/deleteProduct" method="post" style="display:inline;">-->
+<!--                    <input type="hidden" name="productId" value="<%= product.getProductId() %>">-->
+<!--                    <button type="submit" class="btn btn-danger btn-sm">삭제</button>-->
+<!--                </form>-->
+				<button class="btn btn-danger btn-sm delete-btn" data-id="<%= product.getProductId() %>">
+                   삭제
+               </button>
             </p>
         </div>
         <%
-                }
+                }  
             } else {
         %>
         <div class="col-12">
@@ -58,6 +62,34 @@
 </div>
 
 <jsp:include page="footer.jsp" />
+
+<script>
+    $(document).ready(function(){
+        $(".delete-btn").click(function(){
+            var productId = $(this).data("id");
+
+            // 확인창 표시
+            if(confirm("정말로 이 상품을 삭제하시겠습니까?")) {
+                // Ajax 요청
+                $.ajax({
+                    url: '/deleteProduct',
+                    type: 'POST',
+                    data: {
+                        productId: productId
+                    },
+                    success: function(response) {
+                        // 성공하면 해당 상품 삭제 후 페이지에서 제거
+                        alert("상품이 삭제되었습니다.");
+                        location.reload();  // 페이지 새로고침
+                    },
+                    error: function() {
+                        alert("삭제 중 오류가 발생했습니다. 다시 시도해주세요.");
+                    }
+                });
+            }
+        });
+    });
+</script>
 
 </body>
 </html>
