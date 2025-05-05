@@ -1,11 +1,16 @@
 package com.example.myapp.controller;
 
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.UUID;
+
+import javax.imageio.ImageIO;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -237,11 +242,29 @@ public class MyController {
     
     @PostMapping("/deleteProduct")
     @ResponseBody
-    public String deleteProduct(@RequestParam("productId") String productId) {
-        productRepository.deleteProduct(productId);
+    public String deleteProduct(@RequestParam("productId") String productId,
+            @RequestParam("filename") String filename) {
+		// 상품 삭제
+		productRepository.deleteProduct(productId);
+		
+		// 썸네일 및 원본 이미지 삭제
+		String originalPath = "src/main/resources/static/images/" + filename;
+		
+     	File originalFile = new File(originalPath);
+
+		if (originalFile.exists()) {
+		originalFile.delete(); // 원본 파일 삭제
+		}    
+    
         return "success";  // JSON 형식으로 성공 메시지 전달
     }
     
+//    public String deleteProduct(@RequestParam("productId") String productId) {
+//        productRepository.deleteProduct(productId);
+//        return "success";  // JSON 형식으로 성공 메시지 전달
+//    }
+    
+
     @PostMapping("/addProduct_process")
     public String handleUpload(@RequestParam("filename") MultipartFile file,
                                @RequestParam("productName") String productName,
@@ -251,23 +274,22 @@ public class MyController {
                                @RequestParam("category") String category,
                                @RequestParam("unitsInStock") long unitsInStock,
                                @RequestParam("condition") String condition,
-    								HttpServletRequest request) { 
+                               @RequestParam(value = "existingFile", required = false) String existingFile, // 기존 이미지
+                               HttpServletRequest request) {
 
-        String fileName = "";
+        String fileName = existingFile;  // 기존 파일명으로 시작
+        
         if (!file.isEmpty()) {
             fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
             String uploadDir = new File("src/main/resources/static/images").getAbsolutePath();
-            //String uploadDir = "F:\\dev_0420_009\\dev\\workspace\\Boot-Employees REST API\\src\\main\\resources\\static\\images";
-            // 📌 실제 저장 폴더 경로 (static/images)
-            //String uploadDir = request.getServletContext().getRealPath("/images");
-            
-         // 📁 폴더 없으면 생성
+
+            // 폴더 없으면 생성
             File saveFolder = new File(uploadDir);
             if (!saveFolder.exists()) {
                 saveFolder.mkdirs();
             }
-            
-         // 📥 이미지 저장
+
+            // 파일 저장
             File saveFile = new File(uploadDir, fileName);
             try {
                 file.transferTo(saveFile);
@@ -276,6 +298,7 @@ public class MyController {
             }
         }
 
+        // 상품 객체 생성
         Product product = new Product();
         product.setProductId("P" + UUID.randomUUID().toString().substring(0, 8)); // 자동 생성 ID
         product.setProductName(productName);
@@ -292,4 +315,148 @@ public class MyController {
         return "redirect:/products";
     }
 
+    //20250505 추가 
+    @GetMapping("/editProduct")
+    public String editProduct(@RequestParam("id") String id, Model model) {
+        Product product = productRepository.getProductById(id);
+        model.addAttribute("product", product);
+        return "editProduct";  // => editProduct.jsp
+    }
+
+    @PostMapping("/updateProduct")
+    public String updateProduct(@RequestParam("productId") String productId,
+                                @RequestParam("productName") String productName,
+                                @RequestParam("unitPrice") int unitPrice,
+                                @RequestParam("description") String description,
+                                @RequestParam("manufacturer") String manufacturer,
+                                @RequestParam("category") String category,
+                                @RequestParam("unitsInStock") long unitsInStock,
+                                @RequestParam("condition") String condition,
+                                @RequestParam("existingFile") String existingFile,
+                                @RequestParam("filename") MultipartFile file,
+                                HttpServletRequest request) {
+
+        String uploadDir = new File("src/main/resources/static/images").getAbsolutePath();
+        String fileName = existingFile;
+
+        // 새 이미지 업로드 시 기존 이미지 삭제
+        if (!file.isEmpty()) {
+            // 새 파일명
+            fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
+
+            // 기존 원본 + 썸네일 삭제
+            File oldFile = new File(uploadDir, existingFile);
+            File oldThumb = new File(uploadDir, "thumb_" + existingFile);
+            if (oldFile.exists()) oldFile.delete();
+            if (oldThumb.exists()) oldThumb.delete();
+
+            // 새 파일 저장
+            try {
+                File saveFile = new File(uploadDir, fileName);
+                file.transferTo(saveFile);
+
+                // 썸네일 생성
+                createThumbnail(saveFile.getAbsolutePath(), uploadDir + "/thumb_" + fileName);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        Product product = new Product();
+        product.setProductId(productId);
+        product.setProductName(productName);
+        product.setUnitPrice(unitPrice);
+        product.setDescription(description);
+        product.setManufacturer(manufacturer);
+        product.setCategory(category);
+        product.setUnitsInStock(unitsInStock);
+        product.setCondition(condition);
+        product.setFilename(fileName);
+
+        productRepository.updateProduct(product);
+
+        return "redirect:/products";
+    }
+
+
+
+    private void createThumbnail(String imagePath, String thumbnailPath) {
+        try {
+            File inputFile = new File(imagePath);
+            if (!inputFile.exists()) {
+                System.err.println("❌ 이미지 파일 없음: " + imagePath);
+                return;
+            }
+
+            BufferedImage originalImage = ImageIO.read(inputFile);
+            if (originalImage == null) {
+                System.err.println("❌ 이미지 로딩 실패 (null 반환): " + imagePath);
+                return;
+            }
+
+            BufferedImage thumbnail = new BufferedImage(200, 200, BufferedImage.TYPE_INT_RGB);
+            Graphics2D g = thumbnail.createGraphics();
+            g.drawImage(originalImage.getScaledInstance(200, 200, Image.SCALE_SMOOTH), 0, 0, null);
+            g.dispose();
+
+            File outputFile = new File(thumbnailPath);
+            ImageIO.write(thumbnail, "png", outputFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
+	@PostMapping("/editProduct_process")
+    public String editProduct(@RequestParam("productId") String productId,
+                              @RequestParam("productName") String productName,
+                              @RequestParam("unitPrice") int unitPrice,
+                              @RequestParam("description") String description,
+                              @RequestParam("manufacturer") String manufacturer,
+                              @RequestParam("category") String category,
+                              @RequestParam("unitsInStock") long unitsInStock,
+                              @RequestParam("condition") String condition,
+                              @RequestParam("filename") MultipartFile file,
+                              @RequestParam("existingFilename") String existingFilename,
+                              HttpServletRequest request) {
+
+        String fileName = existingFilename;
+
+        if (!file.isEmpty()) {
+            // 1. 기존 파일 삭제
+            String uploadDir = new File("src/main/resources/static/images").getAbsolutePath();
+            File oldFile = new File(uploadDir, existingFilename);
+            if (oldFile.exists()) {
+                oldFile.delete();
+            }
+
+            // 2. 새 파일 저장
+            fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
+            File saveFile = new File(uploadDir, fileName);
+            try {
+                file.transferTo(saveFile);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        Product product = new Product();
+        product.setProductId(productId);
+        product.setProductName(productName);
+        product.setUnitPrice(unitPrice);
+        product.setDescription(description);
+        product.setManufacturer(manufacturer);
+        product.setCategory(category);
+        product.setUnitsInStock(unitsInStock);
+        product.setCondition(condition);
+        product.setFilename(fileName);
+
+        productRepository.updateProduct(product); // Mapper에 이 메서드 필요
+
+        return "redirect:/products";
+    }
+
+    
+    
 }

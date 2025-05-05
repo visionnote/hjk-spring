@@ -47,6 +47,7 @@
             </tr>
         </table>
         <a href="/products" class="btn btn-primary">목록으로</a>
+		<a href="/editProduct?id=<%= product.getProductId() %>" class="btn btn-warning">수정</a>
     <%
         }
     %>

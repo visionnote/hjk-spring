@@ -29,5 +29,11 @@ public class ProductRepository {
     public void deleteProduct(String productId) {
         productMapper.deleteProduct(productId);
     }
+
+	public void updateProduct(Product product) {
+		// TODO Auto-generated method stub
+        productMapper.updateProduct(product);
+
+	}
 }
 

@@ -42,9 +42,14 @@
 <!--                    <input type="hidden" name="productId" value="<%= product.getProductId() %>">-->
 <!--                    <button type="submit" class="btn btn-danger btn-sm">삭제</button>-->
 <!--                </form>-->
-				<button class="btn btn-danger btn-sm delete-btn" data-id="<%= product.getProductId() %>">
-                   삭제
-               </button>
+			<a href="<%= request.getContextPath() %>/editProduct?id=<%= product.getProductId() %>" 
+			     class="btn btn-warning btn-sm">수정</a>
+				 <button type="button" class="btn btn-danger btn-sm delete-btn"
+				         data-id="<%= product.getProductId() %>"
+				         data-filename="<%= product.getFilename() %>">
+				     삭제
+				 </button>
+
             </p>
         </div>
         <%
@@ -67,6 +72,7 @@
     $(document).ready(function(){
         $(".delete-btn").click(function(){
             var productId = $(this).data("id");
+			var filename = $(this).data("filename");
 
             // 확인창 표시
             if(confirm("정말로 이 상품을 삭제하시겠습니까?")) {
@@ -75,7 +81,9 @@
                     url: '/deleteProduct',
                     type: 'POST',
                     data: {
-                        productId: productId
+                        productId: productId						,
+						 filename: filename
+
                     },
                     success: function(response) {
                         // 성공하면 해당 상품 삭제 후 페이지에서 제거
