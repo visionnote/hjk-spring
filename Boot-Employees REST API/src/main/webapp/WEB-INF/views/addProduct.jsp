@@ -12,7 +12,7 @@
 			</div>
 		</div>
 		<div class="container">
-			<form name="newProduct" action="/addProduct_process" class="form-horizontal" method="post">
+			<form name="newProduct" action="/addProduct_process" class="form-horizontal" method="post" enctype="multipart/form-data">
 				<div class="form-group row">
 					<label class="col-sm-2">상품 코드</label>
 					<div class="col-sm-3">
@@ -22,7 +22,7 @@
 				<div class="form-group row">
 					<label class="col-sm-2">상품명</label>
 					<div class="col-sm-3">
-						<input type="text" name="name" class="form-control">
+						<input type="text" name="productName" class="form-control">
 					</div>
 				</div>
 				<div class="form-group row">
@@ -59,11 +59,17 @@
 				<div class="form-group row">
 					<label class="col-sm-2">상태</label>
 				    <div class="col-sm-5">
-						<input type="radio" name="condition" value="New ">신규 제품
-						<input type="radio" name="condition" value="Old ">중고 제품
-						<input type="radio" name="condition" value="New ">재생 제품						
+						<input type="radio" name="condition" value="New">신규 제품
+						<input type="radio" name="condition" value="Old">중고 제품
+						<input type="radio" name="condition" value="Refurbished">재생 제품						
 					</div>
 				</div>
+				<div class="form-group row">
+				       <label class="col-sm-2">이미지등록</label>
+				       <div class="col-sm-3">
+				           <input type="file" name="filename" class="form-control" accept="image/*">
+				       </div>
+				 </div>
 				<div class="form-group row">
 					<div class="col-sm-offset-2 col-sm-10 ">
 						<input type="submit" class="btn btn-primary" value="등록" >

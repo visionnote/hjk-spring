@@ -1,7 +1,6 @@
 <%@ page contentType="text/html; charset=utf-8"%>
 <%@ page import="com.example.myapp.dto.Product"%>
 <%@ page import="com.example.myapp.dao.ProductRepository"%>
-
 <%
 request.setCharacterEncoding("UTF-8");
 

@@ -26,6 +26,8 @@ public class Product implements Serializable {
 		this.unitPrice = unitPrice;
 	}
 
+
+
 	public String getFilename() {
 		return filename;
 	}

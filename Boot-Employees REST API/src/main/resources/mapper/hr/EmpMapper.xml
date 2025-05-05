@@ -2,20 +2,20 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd">
 <mapper namespace="com.example.myapp.hr.dao.IEmpRepository">
 
-	<select id="getEmpCount" resultType="int">
+	<!-- 직원 수 조회 (조건부) -->
+	<select id="getEmpCount" parameterType="map" resultType="int">
 		SELECT COUNT(*) FROM employees
-		<choose>
-			<when test="_parameter == null"></when>
-			<when test="_parameter.containsKey('departmentId')">
-				WHERE department_id=#{departmentId}
-			</when>
-			<when test="_parameter.containsKey('jobId')">
-				WHERE job_id=#{jobId}
-			</when>
-			<otherwise></otherwise>
-		</choose>		
+		<where>
+			<if test="departmentId != null">
+				department_id = #{departmentId}
+			</if>
+			<if test="jobId != null">
+				AND job_id = #{jobId}
+			</if>
+		</where>
 	</select>
 
+	<!-- 직원 리스트 (Map) -->
 	<select id="getEmpListMap" resultType="hashmap">
 		SELECT 	employee_id 	AS "employeeId",
 				first_name 		AS "firstName",
@@ -30,7 +30,8 @@
 				department_id	AS "departmentId"
 		FROM employees
 	</select>
-	
+
+	<!-- 직원 상세정보 (Map) -->
 	<select id="getEmpInfoMap" parameterType="int" resultType="hashmap">
 		SELECT 	employee_id 	AS "employeeId",
 				first_name 		AS "firstName",
@@ -43,27 +44,30 @@
 				commission_pct	AS "commissionPct",
 				manager_id		AS "managerId",
 				department_id	AS "departmentId"
-		FROM employees WHERE employee_id=#{empid}
+		FROM employees WHERE employee_id = #{empid}
 	</select>
 
+	<!-- 직원 resultMap -->
 	<resultMap type="com.example.myapp.hr.model.Emp" id="empMap">
 		<result column="employee_id" 	property="employeeId" />
 		<result column="first_name" 	property="firstName" />
 		<result column="last_name" 	property="lastName" />
-		<result column="email" 	property="email" />
+		<result column="email" 			property="email" />
 		<result column="phone_number" 	property="phoneNumber" />
-		<result column="hire_date" 	property="hireDate" />
-		<result column="job_id" 	property="jobId" />
-		<result column="salary" 	property="salary" />
+		<result column="hire_date" 		property="hireDate" />
+		<result column="job_id" 		property="jobId" />
+		<result column="salary" 		property="salary" />
 		<result column="commission_pct" property="commissionPct" />
 		<result column="manager_id" 	property="managerId" />
 		<result column="department_id" 	property="departmentId" />
 	</resultMap>
-	
+
+	<!-- 직원 리스트 (객체) -->
 	<select id="getEmpList" resultMap="empMap">
 		SELECT * FROM employees
 	</select>
-	
+
+	<!-- 직원 상세정보 (객체) -->
 	<select id="getEmpInfo" parameterType="int" resultType="com.example.myapp.hr.model.Emp">
 		SELECT 	employee_id 	AS employeeId,
 				first_name 		AS firstName,
@@ -76,9 +80,10 @@
 				commission_pct	AS commissionPct,
 				manager_id		AS managerId,
 				department_id	AS departmentId
-		FROM employees WHERE employee_id=#{empid}
+		FROM employees WHERE employee_id = #{empid}
 	</select>
-	
+
+	<!-- 직원 등록 -->
 	<insert id="insertEmp" parameterType="com.example.myapp.hr.model.Emp">
 		INSERT INTO employees 
 			(employee_id, first_name, last_name, email, phone_number, 
@@ -88,43 +93,54 @@
 			(#{employeeId}, #{firstName}, #{lastName}, #{email}, 
 			 #{phoneNumber}, #{hireDate}, #{jobId}, #{salary}, 
 			 #{commissionPct}, #{managerId}, #{departmentId})
-	</insert>
+</insert>
 
+	<!-- 직원 수정 -->
 	<update id="updateEmp" parameterType="com.example.myapp.hr.model.Emp">
 		UPDATE employees
-		SET	first_name=#{firstName}, last_name=#{lastName}, email=#{email}, 
-			phone_number=#{phoneNumber}, hire_date=#{hireDate}, 
-			job_id=#{jobId}, salary=#{salary}, commission_pct=#{commissionPct}, 
-			manager_id=#{managerId}, department_id=#{departmentId}
-		WHERE employee_id=#{employeeId}
+		SET	first_name = #{firstName}, 
+			last_name = #{lastName}, 
+			email = #{email}, 
+			phone_number = #{phoneNumber}, 
+			hire_date = #{hireDate}, 
+			job_id = #{jobId}, 
+			salary = #{salary}, 
+			commission_pct = #{commissionPct}, 
+			manager_id = #{managerId}, 
+			department_id = #{departmentId}
+		WHERE employee_id = #{employeeId}
 	</update>
-		
+
+	<!-- 직원 삭제 (기록 먼저 삭제) -->
 	<delete id="deleteJobHistory" parameterType="int">
-		DELETE job_history WHERE employee_id=#{empid}
+		DELETE FROM job_history WHERE employee_id = #{empid}
 	</delete>
-	
+
 	<delete id="deleteEmp">
-		DELETE employees WHERE employee_id=#{param1} AND email=#{param2}
+		DELETE FROM employees WHERE employee_id = #{param1} AND email = #{param2}
 	</delete>
-	
+
+	<!-- Job ID 목록 -->
 	<select id="getAllJobId" resultType="hashmap">
 		SELECT job_id AS "jobId", job_title AS "jobTitle" FROM jobs
 	</select>
-	
+
+	<!-- Manager ID 목록 -->
 	<select id="getAllManagerId" resultType="hashmap">
 		SELECT 
 			d.manager_id AS "managerId", 
 			e.first_name || ' ' || e.last_name AS "managerName" 
-		FROM departments d JOIN employees e 
-			ON d.manager_id = e.employee_id
+		FROM departments d 
+		JOIN employees e ON d.manager_id = e.employee_id
 		ORDER BY d.manager_id
 	</select>
-	
+
+	<!-- 부서 ID 목록 -->
 	<select id="getAllDeptId" resultType="hashmap">
 		SELECT 
 			department_id AS "departmentId", 
 			department_name AS "departmentName" 
 		FROM departments
 	</select>
-	
+
 </mapper>

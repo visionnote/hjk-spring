@@ -1,68 +1,56 @@
 package com.example.myapp.dao;
 
-import java.util.ArrayList;
-
 import com.example.myapp.dto.Product;
+import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+@Repository
 public class ProductRepository {
-
-	private ArrayList<Product> listOfProducts = new ArrayList<Product>();
+	
 	private static ProductRepository instance = new ProductRepository();
-	
-	public static ProductRepository getInstance() { 
-		return instance;
-	}
 
-	public ProductRepository() {
-		Product phone = new Product("P1234", "iPhone 6s", 800000);
-		phone.setDescription("4.7-inch, 1334x750 Renina HD Display, 8-megapixel iSight Camera");
-		phone.setCategory("Smart Phone");
-		phone.setManufacturer("Apple");
-		phone.setUnitsInStock(1000);
-		phone.setCondition("New");
-		phone.setFilename("P1234.png");
-
-		Product notebook = new Product("P1235", "LG PC 그램", 1500000);
-		notebook.setDescription("13.3-inch, IPS LED display, 5rd Generation Intel Core processors");
-		notebook.setCategory("Notebook");
-		notebook.setManufacturer("LG");
-		notebook.setUnitsInStock(1000);
-		notebook.setCondition("Refurbished");
-		notebook.setFilename("P1235.png");
-
-		Product tablet = new Product("P1236", "Galaxy Tab S", 900000);
-		tablet.setDescription("212.8*125.6*6.6mm, Super AMOLED display, Octa-Core processor");
-		tablet.setCategory("Tablet");
-		tablet.setManufacturer("Samsung");
-		tablet.setUnitsInStock(1000);
-		tablet.setCondition("Old");
-		tablet.setFilename("P1236.png");
-
-		listOfProducts.add(phone);
-		listOfProducts.add(notebook);
-		listOfProducts.add(tablet);
-	}
-
-	public ArrayList<Product> getAllProducts() {
-		return listOfProducts;
+	public static ProductRepository getInstance() {
+	        return instance;
 	}
 	
-	public Product getProductById(String productid) {
-		Product productById = null;
-		
-		for(int i = 0; i < listOfProducts.size(); i++) {
-			Product product = listOfProducts.get(i);
-			if(product != null && product.getProductId() != null && product.getProductId().equals(productid)) {
-				productById = product;
-				break;
-			}
-		}
-		
-		return productById;
-		
-	}
-	
-	public void addProduct(Product product) {
-		listOfProducts.add(product);
-	}
+    private Map<String, Product> productMap = new HashMap<>();
+
+    public ProductRepository() {
+        // 테스트용 더미 데이터
+        Product product1 = new Product("P1234", "노트북", 1500000);
+        product1.setDescription("고성능 노트북입니다.");
+        product1.setCategory("컴퓨터");
+        product1.setManufacturer("삼성");
+        product1.setUnitsInStock(100);
+        product1.setFilename("P1235.png");
+
+        Product product2 = new Product("P1235", "태블릿", 800000);
+        product2.setDescription("가벼운 휴대용 태블릿입니다.");
+        product2.setCategory("태블릿");
+        product2.setManufacturer("애플");
+        product2.setUnitsInStock(50);
+        product2.setFilename("P1236.png");
+
+        productMap.put(product1.getProductId(), product1);
+        productMap.put(product2.getProductId(), product2);
+    }
+
+    public ArrayList<Product> getAllProducts() {
+        return new ArrayList<>(productMap.values());
+    }
+
+    public Product getProductById(String productId) {
+        return productMap.get(productId);
+    }
+
+    public void addProduct(Product product) {
+        productMap.put(product.getProductId(), product);
+    }
+
+    public void deleteProduct(String productId) {
+        productMap.remove(productId); // 실제 삭제 구현
+    }
 }

@@ -104,6 +104,8 @@
 
 
     <!-- Servlet API (제공만, 직접 포함 X) -->
+
+    
     <dependency>
         <groupId>jakarta.servlet</groupId>
         <artifactId>jakarta.servlet-api</artifactId>
@@ -129,6 +131,23 @@
 	  <scope>provided</scope>
 	</dependency>
 
+	<dependency>
+	    <groupId>org.apache.commons</groupId>
+	    <artifactId>commons-fileupload2-jakarta-servlet6</artifactId>
+	    <version>2.0.0-M2</version>
+	</dependency>
+	
+<!--	<dependency>-->
+<!--	    <groupId>commons-fileupload</groupId>-->
+<!--	    <artifactId>commons-fileupload</artifactId>-->
+<!--	    <version>1.5</version>-->
+<!--    </dependency>-->
+	<!-- commons-io -->
+	<dependency>
+	    <groupId>commons-io</groupId>
+	    <artifactId>commons-io</artifactId>
+	    <version>2.13.0</version>
+	</dependency>
 	</dependencies>
 
 	<build>
