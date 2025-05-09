@@ -8,14 +8,23 @@ public class Product implements Serializable {
 
 	private String productId; // 상품 아이디
 	private String productName; // 상품명
-	private Integer unitPrice; // 상품 가격
+	private long unitPrice; // 상품 가격
 	private String description; // 상품 설명
 	private String manufacturer; // 제조사 (의미 수정)
 	private String category; // 분류
-	private long unitsInStock; // 재고 수
+	private int unitsInStock; // 재고 수
 	private String condition; // 신상품 or 중고품 or 재생품
-	private String filename; //이미지 파일명 
+	private String filename; //원본 이미지 파일명 
+	private String thumbnail; //썸네일 파일명 
 	
+	public String getThumbnail() {
+		return thumbnail;
+	}
+
+	public void setThumbnail(String thumbnail) {
+		this.thumbnail = thumbnail;
+	}
+
 	public Product() {
 		super();
 	}
@@ -25,8 +34,6 @@ public class Product implements Serializable {
 		this.productName = productName;
 		this.unitPrice = unitPrice;
 	}
-
-
 
 	public String getFilename() {
 		return filename;
@@ -52,12 +59,12 @@ public class Product implements Serializable {
 		this.productName = productName;
 	}
 
-	public Integer getUnitPrice() {
+	public long getUnitPrice() {
 		return unitPrice;
 	}
 
-	public void setUnitPrice(Integer unitPrice) {
-		this.unitPrice = unitPrice;
+	public void setUnitPrice(long unitPrice2) {
+		this.unitPrice = unitPrice2;
 	}
 
 	public String getDescription() {
@@ -84,11 +91,11 @@ public class Product implements Serializable {
 		this.category = category;
 	}
 
-	public long getUnitsInStock() {
+	public int getUnitsInStock() {
 		return unitsInStock;
 	}
 
-	public void setUnitsInStock(long unitsInStock) {
+	public void setUnitsInStock(Integer unitsInStock) {
 		this.unitsInStock = unitsInStock;
 	}
 

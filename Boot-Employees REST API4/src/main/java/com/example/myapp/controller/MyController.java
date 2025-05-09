@@ -68,11 +68,11 @@ public class MyController {
     @PostMapping("/products")
     public String addProduct(
             @RequestParam("productName") String productName,
-            @RequestParam("unitPrice") int unitPrice,
+            @RequestParam("unitPrice") long unitPrice,
             @RequestParam("description") String description,
             @RequestParam("manufacturer") String manufacturer,
             @RequestParam("category") String category,
-            @RequestParam("unitsInStock") long unitsInStock,
+            @RequestParam("unitsInStock") int unitsInStock,
             @RequestParam("condition") String condition,
             @RequestParam("fileName") MultipartFile fileName,
             HttpServletRequest request) throws IOException {
@@ -288,11 +288,11 @@ public class MyController {
     @PostMapping("/addProduct_process")
     public String handleUpload(@RequestParam("filename") MultipartFile file,
                                @RequestParam("productName") String productName,
-                               @RequestParam("unitPrice") int unitPrice,
+                               @RequestParam("unitPrice") long unitPrice,
                                @RequestParam("description") String description,
                                @RequestParam("manufacturer") String manufacturer,
                                @RequestParam("category") String category,
-                               @RequestParam("unitsInStock") long unitsInStock,
+                               @RequestParam("unitsInStock") int unitsInStock,
                                @RequestParam("condition") String condition,
                                @RequestParam(value = "existingFile", required = false) String existingFile, // 기존 이미지
                                HttpServletRequest request) {
@@ -375,11 +375,11 @@ public class MyController {
     @PostMapping("/updateProduct")
     public String updateProduct(@RequestParam("productId") String productId,
                                 @RequestParam("productName") String productName,
-                                @RequestParam("unitPrice") int unitPrice,
+                                @RequestParam("unitPrice") long unitPrice,
                                 @RequestParam("description") String description,
                                 @RequestParam("manufacturer") String manufacturer,
                                 @RequestParam("category") String category,
-                                @RequestParam("unitsInStock") long unitsInStock,
+                                @RequestParam("unitsInStock") int unitsInStock,
                                 @RequestParam("condition") String condition,
                                 @RequestParam("existingFile") String existingFile,
                                 @RequestParam("filename") MultipartFile file,
@@ -460,11 +460,11 @@ public class MyController {
 	@PostMapping("/editProduct_process")
     public String editProduct(@RequestParam("productId") String productId,
                               @RequestParam("productName") String productName,
-                              @RequestParam("unitPrice") int unitPrice,
+                              @RequestParam("unitPrice") long unitPrice,
                               @RequestParam("description") String description,
                               @RequestParam("manufacturer") String manufacturer,
                               @RequestParam("category") String category,
-                              @RequestParam("unitsInStock") long unitsInStock,
+                              @RequestParam("unitsInStock") int unitsInStock,
                               @RequestParam("condition") String condition,
                               @RequestParam("filename") MultipartFile file,
                               @RequestParam("existingFilename") String existingFilename,
@@ -506,6 +506,11 @@ public class MyController {
         return "redirect:/products";
     }
 
-    
+	//20250509 엑셀로 상품업로드 기능 추가 
+	@GetMapping("/upload")
+	public String showUploadPage() {
+	    return "upload";
+	}
+
     
 }

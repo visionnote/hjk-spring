@@ -15,6 +15,9 @@
             <a href="<%= request.getContextPath() %>/addProduct" class="btn btn-outline-warning">
                 <i class="fas fa-plus-circle"></i> 상품 등록
             </a>
+			<a href="<%= request.getContextPath() %>/upload" class="btn btn-outline-warning">
+			    <i class="fas fa-plus-circle"></i> 엑셀로 상품업로드
+			</a>
         </div>
     </div>
 </nav>
