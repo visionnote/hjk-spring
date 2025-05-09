@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.UUID;
 
 import javax.imageio.ImageIO;
@@ -50,12 +51,17 @@ public class MyController {
     }
     //20250428->20250430 상세 추가 
     @GetMapping("/products")
-    public String showProducts(Model model, HttpServletRequest request) {
+    public String showProducts(@RequestParam(value = "page", defaultValue = "1") int page,
+            @RequestParam(value = "size", defaultValue = "10") int size,Model model, HttpServletRequest request) {
         File uploadDir = new File(request.getServletContext().getRealPath("/uploads"));
         File[] files = uploadDir.listFiles();
         model.addAttribute("files", files);
-        model.addAttribute("listOfProducts", productRepository.getAllProducts());
-        model.addAttribute("productList", productRepository.getAllProducts());
+        //페이징 처리를 위해 아래 2줄 추가함 
+        List<Product> products = productRepository.getProductsByPage(page, size);
+        model.addAttribute("listOfProducts", products);
+        
+//       model.addAttribute("listOfProducts", productRepository.getAllProducts());
+        model.addAttribute("productList", productRepository.getProductsByPage(page, size));
         return "products"; // → products.jsp
     }
 

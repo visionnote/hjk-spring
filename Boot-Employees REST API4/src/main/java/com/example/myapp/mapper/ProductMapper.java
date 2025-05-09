@@ -36,4 +36,13 @@ public interface ProductMapper {
             "units_in_stock=#{unitsInStock}, condition=#{condition}, filename=#{filename} " +
             "WHERE product_id=#{productId}")
     void updateProduct(Product product);
+
+    //20250509 페이징 처리를 위해 추가함 
+    @Select("SELECT product_id AS productId, product_name AS productName, unit_price AS unitPrice, " +
+            "description, manufacturer, category, units_in_stock AS unitsInStock, " +
+            "condition, filename FROM product " +
+            "ORDER BY product_id " +
+            "OFFSET #{offset} ROWS FETCH NEXT #{size} ROWS ONLY")
+    List<Product> getProductsByPage(int offset, int size);
+
 }

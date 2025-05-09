@@ -72,7 +72,33 @@
             }
         %>
     </div>
+	<%
+	    int currentPage = 1;
+	    int size = 10;
+
+	    if (request.getParameter("page") != null) {
+	        currentPage = Integer.parseInt(request.getParameter("page"));
+	    }
+	    if (request.getParameter("size") != null) {
+	        size = Integer.parseInt(request.getParameter("size"));
+	    }
+	%>
+
+	<div class="pagination">
+	    <a href="?page=1&size=<%= size %>">처음</a>
+
+	    <a href="?page=<%= (currentPage > 1) ? (currentPage - 1) : 1 %>&size=<%= size %>" 
+	       <% if (currentPage == 1) { %>class="disabled"<% } %>>
+	       이전
+	    </a>
+
+	    <span>페이지 <%= currentPage %></span>
+
+	    <a href="?page=<%= currentPage + 1 %>&size=<%= size %>">다음</a>
+	</div>
+
     <hr>
+	
 </div>
 
 <jsp:include page="footer.jsp" />
