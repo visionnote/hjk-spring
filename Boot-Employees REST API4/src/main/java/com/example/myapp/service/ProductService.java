@@ -58,7 +58,7 @@ public class ProductService {
             String condition = getCellValue(row.getCell(6));
             String imagePath = getCellValue(row.getCell(7));
 
-            
+            String randomFileName = "";
             String baseDirectory = "F:/dev_0420_009/dev/workspace/Boot-Employees REST API4";
             String resolvedImagePath = "C:/uploads/images/" + imagePath;
 
@@ -117,8 +117,8 @@ public class ProductService {
 
             		 
                	        if (Files.exists(sourcePath1)) {
-            	            String extension = imagePath.substring(imagePath.lastIndexOf("."));
-            	            String randomFileName = UUID.randomUUID().toString() + extension;
+            	            //String extension = imagePath.substring(imagePath.lastIndexOf("."));
+            	            randomFileName = UUID.randomUUID().toString()+"_"+imagePath;
 
             	            // 저장 경로
             	            Path imageDestination = Paths.get(uploadDir, randomFileName);
@@ -170,7 +170,7 @@ public class ProductService {
             }
 
          // 이미지 파일명 추출
-            String imageFileName = Paths.get(imagePath).getFileName().toString();
+            String imageFileName = Paths.get(randomFileName).getFileName().toString();
             Path imageDestination = Paths.get(uploadDir,  imageFileName);
             Path thumbnailDestination = Paths.get(uploadDir, "thumb_" + imageFileName);
 
@@ -188,7 +188,7 @@ public class ProductService {
             product.setCategory(category);
             product.setUnitsInStock(unitsInStock);
             product.setCondition(condition);
-            product.setFilename(imagePath);
+            product.setFilename(imageFileName);
 
             productRepository.addProduct(product);
         }
