@@ -37,12 +37,13 @@ public interface ProductMapper {
             "WHERE product_id=#{productId}")
     void updateProduct(Product product);
 
-    //20250509 페이징 처리를 위해 추가함 
+    //20250509 페이징 처리를 위해 추가함
+    //20250509 수정 최신 순으로 보여줌
     @Select("SELECT product_id AS productId, product_name AS productName, unit_price AS unitPrice, " +
             "description, manufacturer, category, units_in_stock AS unitsInStock, " +
             "condition, filename, created_at AS createdAt, updated_at AS updatedAt " +
             "FROM product " +
-            "ORDER BY product_id OFFSET #{offset} ROWS FETCH NEXT #{size} ROWS ONLY")
+            "ORDER BY updatedAt desc OFFSET #{offset} ROWS FETCH NEXT #{size} ROWS ONLY")
     List<Product> getProductsByPage(int offset, int size);
 
 }
