@@ -518,5 +518,21 @@ public class MyController {
 	    return "upload";
 	}
 
-    
+	//20250512 유효성기능 
+	@GetMapping("/validation01")
+	public String showValidation01() {
+	    return "validation01";
+	}
+	
+	//20250512 엑셀로 상품업로드 기능 추가 
+	@GetMapping("/validation02")
+	public String showValidation02() {
+	    return "validation02";
+	}
+	
+	//20250512 엑셀로 상품업로드 기능 추가 
+	@PostMapping("/validation02_process")
+	public String showValidation02_process() {
+	    return "validation02_process";
+	}
 }
