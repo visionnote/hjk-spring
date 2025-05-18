@@ -1,5 +1,8 @@
 package com.example.myapp;
 
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -25,5 +28,11 @@ public class MyappApplication extends SpringBootServletInitializer {
 
     public static void main(String[] args) {
         SpringApplication.run(MyappApplication.class, args);
+        Timestamp now = new Timestamp(System.currentTimeMillis());
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        String strDate = format.format(now);
+        
+        //System.out.println("오늘은"+strDate+"입니다");
+        System.out.println("오늘은 " + strDate + "입니다");
     }
 }

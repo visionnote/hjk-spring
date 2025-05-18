@@ -32,9 +32,9 @@ import jakarta.servlet.http.HttpServletRequest;
 
 @Controller
 public class MyController {
-	
-	@Autowired
-	ProductRepository productRepository ;
+
+    @Autowired
+    ProductRepository productRepository;
 
     @GetMapping("/hello")
     public String showPage() {
@@ -50,18 +50,19 @@ public class MyController {
     public String showFirst() {
         return "first"; // → first.jsp
     }
-    //20250428->20250430 상세 추가 
+
+    // 20250428->20250430 상세 추가
     @GetMapping("/products")
     public String showProducts(@RequestParam(value = "page", defaultValue = "1") int page,
-            @RequestParam(value = "size", defaultValue = "10") int size,Model model, HttpServletRequest request) {
+            @RequestParam(value = "size", defaultValue = "10") int size, Model model, HttpServletRequest request) {
         File uploadDir = new File(request.getServletContext().getRealPath("/uploads"));
         File[] files = uploadDir.listFiles();
         model.addAttribute("files", files);
-        //페이징 처리를 위해 아래 2줄 추가함 
+        // 페이징 처리를 위해 아래 2줄 추가함
         List<Product> products = productRepository.getProductsByPage(page, size);
         model.addAttribute("listOfProducts", products);
-        
-//       model.addAttribute("listOfProducts", productRepository.getAllProducts());
+
+        // model.addAttribute("listOfProducts", productRepository.getAllProducts());
         model.addAttribute("productList", productRepository.getProductsByPage(page, size));
         return "products"; // → products.jsp
     }
@@ -104,202 +105,207 @@ public class MyController {
 
         return "redirect:/products";
     }
-    
-    //20250430
+
+    // 20250430
     @GetMapping("/product")
     public String getProduct(@RequestParam("id") String id, Model model) {
-    	System.out.println("요청 ID: " + id);
-        
-//        Product product = new Product();
-//        product.setProductId(id);
-//        product.setProductName("테스트 상품");
-//        product.setDescription("테스트 설명");
-//        product.setUnitPrice(10000);
-        
+        System.out.println("요청 ID: " + id);
+
+        // Product product = new Product();
+        // product.setProductId(id);
+        // product.setProductName("테스트 상품");
+        // product.setDescription("테스트 설명");
+        // product.setUnitPrice(10000);
+
         Product product = productRepository.getProductById(id);
-        System.out.println("조회된 상품: " + product); 
+        System.out.println("조회된 상품: " + product);
         model.addAttribute("product", product);
-        
-        //20250505 추가하기 
+
+        // 20250505 추가하기
         model.addAttribute("id", id); // ✅ id도 모델에 추가
         return "product"; // => /WEB-INF/views/product.jsp 로 이동
     }
-    
-    //20250428
+
+    // 20250428
     @GetMapping("/request")
     public String showRequest() {
         return "request"; // → request.jsp
     }
-    //20250428   
+
+    // 20250428
     // 수정: /process는 GET과 POST 모두 처리할 수 있게
     @RequestMapping("/process")
     public String processRequest() {
         return "process"; // → process.jsp
     }
-    
-    //20250429
+
+    // 20250429
     @GetMapping("/request01")
     public String showRequest01() {
         return "request01"; // → request01.jsp
     }
-    
-    //20250429
+
+    // 20250429
     @GetMapping("/request02")
     public String showRequest02() {
         return "request02"; // → request02.jsp
     }
-    //20250429
+
+    // 20250429
     @GetMapping("/start")
     public String showStart() {
         return "start"; // → start.jsp
     }
-    //20250429
+
+    // 20250429
     @GetMapping("/move")
     public String showMove() {
         return "move"; // → move.jsp
     }
-    
+
     @GetMapping("/forward")
     public String showForward() {
         return "forward"; // → forward.jsp
     }
+
     @GetMapping("/redirect")
     public String showRedirect() {
         return "redirect"; // → redirect.jsp
     }
-    
+
     @GetMapping("/response")
     public String showResponse() {
         return "response"; // → response.jsp
     }
-    
+
     @GetMapping("/response01")
     public String showResponse01() {
         return "response01"; // → response01.jsp
     }
-    
+
     @PostMapping("/response01_process")
     public String showResponse01_process() {
         return "response01_process"; // → response01_process.jsp
     }
-    
+
     @GetMapping("/response01_success")
     public String showResponse01_success() {
         return "response01_success"; // → response01_success.jsp
     }
-    
+
     @GetMapping("/response01_failed")
     public String showResponse01_failed() {
         return "response01_failed"; // → response01_failed.jsp
     }
-    //20250501
+
+    // 20250501
     @GetMapping("/form01")
     public String showform01() {
         return "form01"; // → form01.jsp
     }
-    
-  //20250501
+
+    // 20250501
     @PostMapping("/form01_process")
     public String showform01_process() {
         return "form01_process"; // → form01_process.jsp
     }
-    
-    //20250502 
+
+    // 20250502
     @GetMapping("/fileupload03")
     public String showfileupload03() {
         return "fileupload03"; // → fileupload01.jsp
     }
-    
-    //20250502
+
+    // 20250502
     @PostMapping("/fileupload03_process")
     public String showfileupload03_process() {
         return "fileupload03_process"; // → fileupload01_process.jsp
     }
 
-    //20250505
+    // 20250505
     @GetMapping("/home")
     public String showHome() {
         return "home"; // home.jsp를 렌더링
     }
 
-    //20250501
+    // 20250501
     @GetMapping("/addProduct")
     public String showAddProduct() {
         return "addProduct"; // → addProduct.jsp
     }
-    
-    //20250504
+
+    // 20250504
     @Value("${file.upload-dir}")
     private String uploadDir;
 
-//    @PostMapping("/addProduct_process")
-//    public String showAddProduct_process(@RequestParam("productName") String productName,
-//                                 @RequestParam("fileName") MultipartFile fileName,
-//                                 Model model) throws IOException {
-//
-//    	
-//    	
-//        if (!fileName.isEmpty()) {
-//            String fileName2 = UUID.randomUUID() + "_" + fileName.getOriginalFilename();
-//            Path savePath = Paths.get(uploadDir, fileName2);
-//            Files.createDirectories(savePath.getParent());
-//            Files.write(savePath, fileName.getBytes());
-//
-//            model.addAttribute("filename", "/uploads/" + fileName);
-//            model.addAttribute("productName", productName);
-//        }
-//
-//        return "products"; // 업로드 확인용 페이지
-//    }
-    
+    // @PostMapping("/addProduct_process")
+    // public String showAddProduct_process(@RequestParam("productName") String
+    // productName,
+    // @RequestParam("fileName") MultipartFile fileName,
+    // Model model) throws IOException {
+    //
+    //
+    //
+    // if (!fileName.isEmpty()) {
+    // String fileName2 = UUID.randomUUID() + "_" + fileName.getOriginalFilename();
+    // Path savePath = Paths.get(uploadDir, fileName2);
+    // Files.createDirectories(savePath.getParent());
+    // Files.write(savePath, fileName.getBytes());
+    //
+    // model.addAttribute("filename", "/uploads/" + fileName);
+    // model.addAttribute("productName", productName);
+    // }
+    //
+    // return "products"; // 업로드 확인용 페이지
+    // }
+
     @PostMapping("/deleteProduct")
     @ResponseBody
     public String deleteProduct(@RequestParam("productId") String productId,
             @RequestParam("filename") String filename) {
-		// 상품 삭제
-		productRepository.deleteProduct(productId);
-		
-		// 1. 썸네일 및 원본 이미지 삭제
-		String originalPath = "src/main/resources/static/images/" + filename;
-		
-     	File originalFile = new File(originalPath);
+        // 상품 삭제
+        productRepository.deleteProduct(productId);
 
-		if (originalFile.exists()) {
-			originalFile.delete(); // 원본 파일 삭제
-		}    
-		
-		// 2. 썸네일 이미지 삭제 
-		String thumbPath = "src/main/resources/static/images/" + "thumb_" + filename;
-		
-     	File thumbFile = new File(thumbPath);
+        // 1. 썸네일 및 원본 이미지 삭제
+        String originalPath = "src/main/resources/static/images/" + filename;
 
-		if (thumbFile.exists()) {
-			thumbFile.delete(); // 원본 파일 삭제
-		}    
-    
-        return "success";  // JSON 형식으로 성공 메시지 전달
+        File originalFile = new File(originalPath);
+
+        if (originalFile.exists()) {
+            originalFile.delete(); // 원본 파일 삭제
+        }
+
+        // 2. 썸네일 이미지 삭제
+        String thumbPath = "src/main/resources/static/images/" + "thumb_" + filename;
+
+        File thumbFile = new File(thumbPath);
+
+        if (thumbFile.exists()) {
+            thumbFile.delete(); // 원본 파일 삭제
+        }
+
+        return "success"; // JSON 형식으로 성공 메시지 전달
     }
-    
-//    public String deleteProduct(@RequestParam("productId") String productId) {
-//        productRepository.deleteProduct(productId);
-//        return "success";  // JSON 형식으로 성공 메시지 전달
-//    }
-    
+
+    // public String deleteProduct(@RequestParam("productId") String productId) {
+    // productRepository.deleteProduct(productId);
+    // return "success"; // JSON 형식으로 성공 메시지 전달
+    // }
 
     @PostMapping("/addProduct_process")
     public String handleUpload(@RequestParam("filename") MultipartFile file,
-                               @RequestParam("productName") String productName,
-                               @RequestParam("unitPrice") long unitPrice,
-                               @RequestParam("description") String description,
-                               @RequestParam("manufacturer") String manufacturer,
-                               @RequestParam("category") String category,
-                               @RequestParam("unitsInStock") int unitsInStock,
-                               @RequestParam("condition") String condition,
-                               @RequestParam(value = "existingFile", required = false) String existingFile, // 기존 이미지
-                               HttpServletRequest request) {
+            @RequestParam("productName") String productName,
+            @RequestParam("unitPrice") long unitPrice,
+            @RequestParam("description") String description,
+            @RequestParam("manufacturer") String manufacturer,
+            @RequestParam("category") String category,
+            @RequestParam("unitsInStock") int unitsInStock,
+            @RequestParam("condition") String condition,
+            @RequestParam(value = "existingFile", required = false) String existingFile, // 기존 이미지
+            HttpServletRequest request) {
 
-        String fileName = existingFile;  // 기존 파일명으로 시작
-        
+        String fileName = existingFile; // 기존 파일명으로 시작
+
         if (!file.isEmpty()) {
             fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
             String uploadDir = new File("src/main/resources/static/images").getAbsolutePath();
@@ -317,15 +323,15 @@ public class MyController {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            
-         // 3. 썸네일 생성
+
+            // 3. 썸네일 생성
             File thumbFile = new File(uploadDir, "thumb_" + fileName);
             try {
-				createThumbnail(saveFile, thumbFile, 50, 50);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} // 썸네일 크기: 200x200
+                createThumbnail(saveFile, thumbFile, 50, 50);
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } // 썸네일 크기: 200x200
         }
 
         // 상품 객체 생성
@@ -339,18 +345,19 @@ public class MyController {
         product.setUnitsInStock(unitsInStock);
         product.setCondition(condition);
         product.setFilename(fileName);
-        
-        product.setCreatedAt(LocalDateTime.now());  // 등록일 설정
-        product.setUpdatedAt(LocalDateTime.now());  // 수정일 초기값 설정
+
+        product.setCreatedAt(LocalDateTime.now()); // 등록일 설정
+        product.setUpdatedAt(LocalDateTime.now()); // 수정일 초기값 설정
 
         productRepository.addProduct(product);
 
         return "redirect:/products";
     }
-    
+
     private void createThumbnail(File originalFile, File thumbnailFile, int width, int height) throws IOException {
         BufferedImage originalImage = ImageIO.read(originalFile);
-        if (originalImage == null) return;
+        if (originalImage == null)
+            return;
 
         Image scaledImage = originalImage.getScaledInstance(width, height, Image.SCALE_SMOOTH);
         BufferedImage bufferedThumb = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
@@ -367,27 +374,26 @@ public class MyController {
         return dotIndex >= 0 ? fileName.substring(dotIndex + 1) : "jpg";
     }
 
-
-    //20250505 추가 
+    // 20250505 추가
     @GetMapping("/editProduct")
     public String editProduct(@RequestParam("id") String id, Model model) {
         Product product = productRepository.getProductById(id);
         model.addAttribute("product", product);
-        return "editProduct";  // => editProduct.jsp
+        return "editProduct"; // => editProduct.jsp
     }
 
     @PostMapping("/updateProduct")
     public String updateProduct(@RequestParam("productId") String productId,
-                                @RequestParam("productName") String productName,
-                                @RequestParam("unitPrice") long unitPrice,
-                                @RequestParam("description") String description,
-                                @RequestParam("manufacturer") String manufacturer,
-                                @RequestParam("category") String category,
-                                @RequestParam("unitsInStock") int unitsInStock,
-                                @RequestParam("condition") String condition,
-                                @RequestParam("existingFile") String existingFile,
-                                @RequestParam("filename") MultipartFile file,
-                                HttpServletRequest request) {
+            @RequestParam("productName") String productName,
+            @RequestParam("unitPrice") long unitPrice,
+            @RequestParam("description") String description,
+            @RequestParam("manufacturer") String manufacturer,
+            @RequestParam("category") String category,
+            @RequestParam("unitsInStock") int unitsInStock,
+            @RequestParam("condition") String condition,
+            @RequestParam("existingFile") String existingFile,
+            @RequestParam("filename") MultipartFile file,
+            HttpServletRequest request) {
 
         String uploadDir = new File("src/main/resources/static/images").getAbsolutePath();
         String fileName = existingFile;
@@ -400,8 +406,10 @@ public class MyController {
             // 기존 원본 + 썸네일 삭제
             File oldFile = new File(uploadDir, existingFile);
             File oldThumb = new File(uploadDir, "thumb_" + existingFile);
-            if (oldFile.exists()) oldFile.delete();
-            if (oldThumb.exists()) oldThumb.delete();
+            if (oldFile.exists())
+                oldFile.delete();
+            if (oldThumb.exists())
+                oldThumb.delete();
 
             // 새 파일 저장
             try {
@@ -425,15 +433,13 @@ public class MyController {
         product.setUnitsInStock(unitsInStock);
         product.setCondition(condition);
         product.setFilename(fileName);
-        
-        product.setUpdatedAt(LocalDateTime.now());  // 수정일 갱신
+
+        product.setUpdatedAt(LocalDateTime.now()); // 수정일 갱신
 
         productRepository.updateProduct(product);
 
         return "redirect:/products";
     }
-
-
 
     private void createThumbnail(String imagePath, String thumbnailPath) {
         try {
@@ -461,20 +467,18 @@ public class MyController {
         }
     }
 
-
-
-	@PostMapping("/editProduct_process")
+    @PostMapping("/editProduct_process")
     public String editProduct(@RequestParam("productId") String productId,
-                              @RequestParam("productName") String productName,
-                              @RequestParam("unitPrice") long unitPrice,
-                              @RequestParam("description") String description,
-                              @RequestParam("manufacturer") String manufacturer,
-                              @RequestParam("category") String category,
-                              @RequestParam("unitsInStock") int unitsInStock,
-                              @RequestParam("condition") String condition,
-                              @RequestParam("filename") MultipartFile file,
-                              @RequestParam("existingFilename") String existingFilename,
-                              HttpServletRequest request) {
+            @RequestParam("productName") String productName,
+            @RequestParam("unitPrice") long unitPrice,
+            @RequestParam("description") String description,
+            @RequestParam("manufacturer") String manufacturer,
+            @RequestParam("category") String category,
+            @RequestParam("unitsInStock") int unitsInStock,
+            @RequestParam("condition") String condition,
+            @RequestParam("filename") MultipartFile file,
+            @RequestParam("existingFilename") String existingFilename,
+            HttpServletRequest request) {
 
         String fileName = existingFilename;
 
@@ -512,27 +516,48 @@ public class MyController {
         return "redirect:/products";
     }
 
-	//20250509 엑셀로 상품업로드 기능 추가 
-	@GetMapping("/upload")
-	public String showUploadPage() {
-	    return "upload";
-	}
+    // 20250509 엑셀로 상품업로드 기능 추가
+    @GetMapping("/upload")
+    public String showUploadPage() {
+        return "upload";
+    }
 
-	//20250512 유효성기능 
-	@GetMapping("/validation01")
-	public String showValidation01() {
-	    return "validation01";
-	}
-	
-	//20250512 엑셀로 상품업로드 기능 추가 
-	@GetMapping("/validation02")
-	public String showValidation02() {
-	    return "validation02";
-	}
-	
-	//20250512 엑셀로 상품업로드 기능 추가 
-	@PostMapping("/validation02_process")
-	public String showValidation02_process() {
-	    return "validation02_process";
-	}
+    // 20250512 유효성기능
+    @GetMapping("/validation01")
+    public String showValidation01() {
+        return "validation01";
+    }
+
+    // 20250512 엑셀로 상품업로드 기능 추가
+    @GetMapping("/validation02")
+    public String showValidation02() {
+        return "validation02";
+    }
+
+    // 20250512 엑셀로 상품업로드 기능 추가
+    @PostMapping("/validation02_process")
+    public String showValidation02_process() {
+        return "validation02_process";
+    }
+
+    // 20250518 index.jsp가 서버에서 동작하는 방법 보여주기
+    @GetMapping("/index")
+    public String showIndex() {
+        return "index";
+    }
+
+    @GetMapping("/pageDirective")
+    public String showPageDirective() {
+        return "pageDirective";
+    }
+
+    @GetMapping("/pageDirectiveImport")
+    public String showPageDirectiveImport() {
+        return "pageDirectiveImport";
+    }
+
+    @GetMapping("/pageDirectiveSession")
+    public String showPageDirectiveSession() {
+        return "pageDirectiveSession";
+    }
 }
