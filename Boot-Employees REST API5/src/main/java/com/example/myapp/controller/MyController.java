@@ -602,4 +602,24 @@ public class MyController {
         return "jspComment";
     }
 
+    @GetMapping("/ifTestForm")
+    public String showIfTestForm() {
+        return "ifTestForm";
+    }
+
+    @PostMapping("/ifTestPro")
+    public String showIfTestPro() {
+        return "ifTestPro";
+    }
+
+    @GetMapping("/ifElseTestForm")
+    public String showIfElseTestForm() {
+        return "ifElseTestForm";
+    }
+
+    @PostMapping("/ifElseTestPro")
+    public String showIfElseTestPro() {
+        return "ifElseTestPro";
+    }
+
 }
