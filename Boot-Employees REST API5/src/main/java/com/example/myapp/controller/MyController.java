@@ -642,4 +642,23 @@ public class MyController {
         return "switchTestPro";
     }
 
+    @GetMapping("/forTest")
+    public String showForTest() {
+        return "forTest";
+    }
+
+    @GetMapping("/whileTest")
+    public String showWhileTest() {
+        return "whileTest";
+    }
+
+    @GetMapping("/requestTestForm")
+    public String showRequestTestForm() {
+        return "requestTestForm";
+    }
+
+    @PostMapping("/requestTestPro")
+    public String showRequestTestPro() {
+        return "requestTestPro";
+    }
 }
