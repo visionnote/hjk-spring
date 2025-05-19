@@ -671,4 +671,10 @@ public class MyController {
     public String showResponseRedirect() {
         return "responseRedirect";
     }
+
+    @GetMapping("/responseRedirected")
+    public String showResponseRedirected() {
+        return "responseRedirected";
+    }
+
 }
