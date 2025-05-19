@@ -632,4 +632,14 @@ public class MyController {
         return "ifMultiTestPro";
     }
 
+    @GetMapping("/switchTestForm")
+    public String showSwitchTestForm() {
+        return "switchTestForm";
+    }
+
+    @PostMapping("/switchTestPro")
+    public String showSwitchTestPro() {
+        return "switchTestPro";
+    }
+
 }
