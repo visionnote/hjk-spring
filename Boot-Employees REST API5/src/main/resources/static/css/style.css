@@ -1,0 +1,51 @@
+body {
+    transition: background-color 0.5s ease;  /* 배경색 전환 효과 */
+    background-color: #f5f5f5; /* 메인 배경색 */
+}
+
+.top-container {
+    background-color: #374785; /* 헤더 배경색 */
+    color: #ffffff;  /* 텍스트를 하얀색으로 */
+    padding: 10px;
+}
+
+.bottom-container {
+    background-color: #24305e;  /* 푸터 배경색 */
+    color: #ffffff;
+    padding: 10px;
+}
+
+.date-color {
+    color: #f8b400;  /* 밝은 오렌지 - 날짜 */
+    font-weight: bold; /* 강조 효과 */
+}
+
+.time-color {
+    color: #e0e0e0;  /* 연한 회색 - 시간 */
+}
+.morning-bg {
+    background-color: #FFF9C4; /* 연한 노란색 (아침) */
+}
+
+.afternoon-bg {
+    background-color: #BBDEFB; /* 연한 하늘색 (낮) */
+}
+
+.evening-bg {
+    background-color: #FFCCBC; /* 연한 주황색 (저녁) */
+}
+
+.night-bg {
+    background-color: #263238; /* 어두운 청색 (밤) */
+    color: white; /* 밤에는 글자색을 흰색으로 */
+}
+
+.clock {
+    position: fixed;
+    top: 10px;
+    right: 20px;
+    font-size: 48px;  /* 크기를 크게 */
+    font-weight: bold;
+    color: #f8b400;  /* 전광판 느낌의 주황색 */
+    text-shadow: 1px 1px 2px #000;
+}

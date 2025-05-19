@@ -560,4 +560,46 @@ public class MyController {
     public String showPageDirectiveSession() {
         return "pageDirectiveSession";
     }
+
+    @GetMapping("/directiveInclude")
+    public String showDirectiveInclude() {
+        return "directiveInclude";
+    }
+
+    @GetMapping("/scriptTest")
+    public String showScriptTest() {
+        return "scriptTest";
+    }
+
+    // 20250519
+    @GetMapping("/declarationTest")
+    public String showDeclarationTest() {
+        return "declarationTest";
+    }
+
+    @GetMapping("/declarationTest2")
+    public String showDeclarationTest2() {
+        return "declarationTest2";
+    }
+
+    @GetMapping("/expressionTest")
+    public String showExpressionTest() {
+        return "expressionTest";
+    }
+
+    @GetMapping("/expressionTest2")
+    public String showExpressionTest2() {
+        return "expressionTest2";
+    }
+
+    @GetMapping("/htmlComment2")
+    public String showHtmlComment2() {
+        return "htmlComment2";
+    }
+
+    @GetMapping("/jspComment")
+    public String showJspComment() {
+        return "jspComment";
+    }
+
 }
