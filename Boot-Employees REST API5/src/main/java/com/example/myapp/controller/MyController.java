@@ -622,4 +622,14 @@ public class MyController {
         return "ifElseTestPro";
     }
 
+    @GetMapping("/ifMultiTestForm")
+    public String showIfMultiTestForm() {
+        return "ifMultiTestForm";
+    }
+
+    @PostMapping("/ifMultiTestPro")
+    public String showIfMultiTestPro() {
+        return "ifMultiTestPro";
+    }
+
 }
