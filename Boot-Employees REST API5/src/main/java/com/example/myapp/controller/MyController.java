@@ -677,4 +677,9 @@ public class MyController {
         return "responseRedirected";
     }
 
+    @GetMapping("/outTest")
+    public String showOutTest() {
+        return "outTest";
+    }
+
 }
