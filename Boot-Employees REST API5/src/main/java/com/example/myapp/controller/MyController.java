@@ -661,4 +661,14 @@ public class MyController {
     public String showRequestTestPro() {
         return "requestTestPro";
     }
+
+    @GetMapping("/requestTest2")
+    public String showRequestTest2() {
+        return "requestTest2";
+    }
+
+    @GetMapping("/responseRedirect")
+    public String showResponseRedirect() {
+        return "responseRedirect";
+    }
 }
