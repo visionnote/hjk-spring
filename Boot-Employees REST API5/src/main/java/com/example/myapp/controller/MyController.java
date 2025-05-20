@@ -731,4 +731,14 @@ public class MyController {
     public String showSelectTest() {
         return "selectTest";
     }
+    
+    @GetMapping("/updateTestForm")
+    public String showUpdateTestForm() {
+        return "updateTestForm";
+    }
+
+    @PostMapping("/updateTestPro")
+    public String showUpdateTestPro() {
+        return "updateTestPro";
+    }
 }

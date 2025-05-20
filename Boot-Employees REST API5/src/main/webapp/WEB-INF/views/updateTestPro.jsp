@@ -4,12 +4,12 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
-		<title>member 테이블에 레코드 추가</title>
+		<title>member 테이블 레코드 변경</title>
 		<link rel="stylesheet" href="/css/style.css">
 	</head>
 	<body>
 			<%@include file="top.jsp"%>
-			<h2>member 테이블에 레코드 추가</h2>
+			<h2>member 테이블 레코드 변경</h2>
 			
 			<%
 			String id = request.getParameter("id");
@@ -20,6 +20,7 @@
 			
 			Connection conn = null;
 			PreparedStatement pstmt = null;
+			ResultSet rs = null;
 			String str;
 			try {
 				String jdbcUrl="jdbc:mysql://localhost:3306/basicjsp";
@@ -29,19 +30,35 @@
 				Class.forName("com.mysql.jdbc.Driver");
 				conn=DriverManager.getConnection(jdbcUrl, dbId, dbPass);
 
-				String sql="insert into member values (?,?,?,?,?)";
+				String sql="select id, passwd from member where id=?";
 				pstmt = conn.prepareStatement(sql);
 				pstmt.setString(1,id);
-				pstmt.setString(2,passwd);
-				pstmt.setString(3,name);
-				pstmt.setTimestamp(4,register);
-				pstmt.setTimestamp(5,modifier);
-				pstmt.executeUpdate();
-				str = "member 테이블에 새로운 레코드를 추가했습니다.";
+				rs = pstmt.executeQuery();
+
+				if(rs.next()) {
+					String rId = rs.getString("id");
+					String rPasswd = rs.getString("passwd");
+					if(id.equals(rId) && passwd.equals(rPasswd)) {
+						sql = "update member set name=?, mod_date = ? where id =?";
+						pstmt = conn.prepareStatement(sql);
+						pstmt.setString(1,name);
+						pstmt.setTimestamp(2,modifier);
+						pstmt.setString(3,id);
+						pstmt.executeUpdate();
+				str = "member 테이블 레코드를 변경했습니다.";
+				
+					} else 
+					str = "패스워드를 확인하세요.";
+				} else
+				str = "아이디를 확인하세요.";		
 			} catch(Exception e) {
 				e.printStackTrace();
-				str="member 테이블에 새로운 레코드 추가를 실패했습니다.";
+				str="member 테이블 레코드 변경에 실패했습니다.";
 			} finally {
+				if(rs != null) 
+				try{rs.close();}
+				catch(SQLException sqle){};
+
 				if(pstmt != null) 
 				try{pstmt.close();}
 				catch(SQLException sqle){};
