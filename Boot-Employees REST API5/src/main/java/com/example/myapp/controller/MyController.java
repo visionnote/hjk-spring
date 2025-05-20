@@ -691,4 +691,9 @@ public class MyController {
     public String showIncludeTest() {
         return "includeTest";
     }
+
+    @GetMapping("/includeTest2")
+    public String showIncludeTest2() {
+        return "includeTest2";
+    }
 }
