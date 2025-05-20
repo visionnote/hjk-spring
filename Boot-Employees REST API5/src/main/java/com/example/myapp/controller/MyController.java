@@ -726,4 +726,9 @@ public class MyController {
     public String showInsertTestPro() {
         return "insertTestPro";
     }
+    
+    @GetMapping("/selectTest")
+    public String showSelectTest() {
+        return "selectTest";
+    }
 }
