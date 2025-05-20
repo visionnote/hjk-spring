@@ -7,7 +7,6 @@
 		<link rel="stylesheet" href="/css/style.css">
 	</head>
 	<body>
-			<%@include file="top.jsp"%>
 			<%
 			String name = request.getParameter("name");
 			%>
@@ -15,7 +14,6 @@
 			<b><%=name%></b>님 안녕하세요.
 			<hr>
 			<p>
-			<%@include file="bottom.jsp"%>
 	</body>
 </html>
 		

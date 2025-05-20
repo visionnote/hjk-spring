@@ -14,8 +14,8 @@
 			%>
 			포함하는 페이지 includeTest.jsp 입니다.
 			<hr>
-			<jsp:include page="<%=pageNumber%>" flush="false"/>
-			includeTest.jsp의 마머지 내용입니다. 
+			<jsp:include page="<%=pageName%>" flush="false"/>
+			includeTest.jsp의 나머지 내용입니다. 
 			<p>
 			<%@include file="bottom.jsp"%>
 	</body>
