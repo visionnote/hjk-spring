@@ -682,4 +682,13 @@ public class MyController {
         return "outTest";
     }
 
+    @GetMapping("/includeTestForm")
+    public String showIncludeTestForm() {
+        return "includeTestForm";
+    }
+
+    @PostMapping("/includeTest")
+    public String showIncludeTest() {
+        return "includeTest";
+    }
 }
