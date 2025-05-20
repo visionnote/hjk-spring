@@ -696,4 +696,14 @@ public class MyController {
     public String showIncludeTest2() {
         return "includeTest2";
     }
+
+    @GetMapping("/forwardTestForm")
+    public String showForwardTestForm() {
+        return "forwardTestForm";
+    }
+
+    @PostMapping("/forwardTest")
+    public String showForwardTest() {
+        return "forwardTest";
+    }
 }
