@@ -706,4 +706,9 @@ public class MyController {
     public String showForwardTest() {
         return "forwardTest";
     }
+
+    @GetMapping("/forwardTest2")
+    public String showForwardTest2() {
+        return "forwardTest2";
+    }
 }
