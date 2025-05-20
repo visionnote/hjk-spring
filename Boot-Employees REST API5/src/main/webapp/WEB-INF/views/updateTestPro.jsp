@@ -30,27 +30,22 @@
 				Class.forName("com.mysql.jdbc.Driver");
 				conn=DriverManager.getConnection(jdbcUrl, dbId, dbPass);
 
-				String sql="select id, passwd from member where id=?";
-				pstmt = conn.prepareStatement(sql);
-				pstmt.setString(1,id);
-				rs = pstmt.executeQuery();
+				String sql = "UPDATE member "
+				+ "SET name = ?, mod_date = ? "
+				+ "WHERE id = ? AND passwd = ?";
+			try (pstmt = conn.prepareStatement(sql)) {
+				pstmt.setString(1, name);
+				pstmt.setTimestamp(2, modifier);
+				pstmt.setString(3, id);
+				pstmt.setString(4, passwd);
 
-				if(rs.next()) {
-					String rId = rs.getString("id");
-					String rPasswd = rs.getString("passwd");
-					if(id.equals(rId) && passwd.equals(rPasswd)) {
-						sql = "update member set name=?, mod_date = ? where id =?";
-						pstmt = conn.prepareStatement(sql);
-						pstmt.setString(1,name);
-						pstmt.setTimestamp(2,modifier);
-						pstmt.setString(3,id);
-						pstmt.executeUpdate();
-				str = "member 테이블 레코드를 변경했습니다.";
-				
-					} else 
-					str = "패스워드를 확인하세요.";
-				} else
-				str = "아이디를 확인하세요.";		
+				int updated = pstmt.executeUpdate();
+				if (updated == 1) {
+					str = "회원 정보를 변경했습니다.";
+				} else {
+					str = "아이디 또는 패스워드를 확인하세요.";
+				}
+}
 			} catch(Exception e) {
 				e.printStackTrace();
 				str="member 테이블 레코드 변경에 실패했습니다.";
