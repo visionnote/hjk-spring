@@ -711,4 +711,9 @@ public class MyController {
     public String showForwardTest2() {
         return "forwardTest2";
     }
+
+    @GetMapping("/driverTest")
+    public String showDriverTest() {
+        return "driverTest";
+    }
 }
