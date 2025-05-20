@@ -716,4 +716,14 @@ public class MyController {
     public String showDriverTest() {
         return "driverTest";
     }
+    
+    @GetMapping("/insertTestForm")
+    public String showInsertTestForm() {
+        return "insertTestForm";
+    }
+
+    @PostMapping("/insertTestPro")
+    public String showInsertTestPro() {
+        return "insertTestPro";
+    }
 }

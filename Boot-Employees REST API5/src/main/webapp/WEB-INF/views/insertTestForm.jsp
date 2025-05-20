@@ -17,6 +17,7 @@
 				이름: <input type="text" name="name" maxlength="10"><br>
 				<input type="submit" value="입력완료">
 			</form>
+
 			<p>
 			<%@include file="bottom.jsp"%>
 	</body>
