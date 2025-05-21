@@ -762,4 +762,14 @@ public class MyController {
     public String showUseCookie() {
         return "useCookie";
     }
+    
+    @GetMapping("/insertMemberForm")
+    public String showInsertMemberForm() {
+        return "insertMemberForm";
+    }
+
+    @PostMapping("/insertMemberPro")
+    public String showInsertMemberPro() {
+        return "insertMemberPro";
+    }
 }
