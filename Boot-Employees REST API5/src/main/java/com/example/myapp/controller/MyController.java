@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -19,6 +20,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,6 +29,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.example.myapp.dao.ProductRepository;
 import com.example.myapp.dto.Product;
+import com.example.myapp.model.Member;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -762,14 +765,5 @@ public class MyController {
     public String showUseCookie() {
         return "useCookie";
     }
-    
-    @GetMapping("/insertMemberForm")
-    public String showInsertMemberForm() {
-        return "insertMemberForm";
-    }
-
-    @PostMapping("/insertMemberPro")
-    public String showInsertMemberPro() {
-        return "insertMemberPro";
-    }
-}
+      
+   }

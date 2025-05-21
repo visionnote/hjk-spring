@@ -10,11 +10,14 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-
+@MapperScan("com.example.myapp.dao")  // ← DAO 인터페이스 경로 지정
 @SpringBootApplication(scanBasePackages = {"com.example.myapp", "com.example.upload"})
 @MapperScan({
     "com.example.myapp.mapper",
-    "com.example.myapp.hr.dao"
+    "com.example.myapp.hr.dao",
+    "com.example.myapp.mysql.mapper",
+    "com.example.myapp.oracle.mapper",
+	"com.example.myapp.dao"  // ← DAO 인터페이스 경로 지정
 })
 @EnableJpaRepositories(basePackages = "com.example.upload")
 @EntityScan(basePackages = "com.example.upload")
