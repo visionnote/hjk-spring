@@ -33,7 +33,8 @@
 				String sql = "UPDATE member "
 				+ "SET name = ?, mod_date = ? "
 				+ "WHERE id = ? AND passwd = ?";
-			try (pstmt = conn.prepareStatement(sql)) {
+
+				pstmt = conn.prepareStatement(sql);
 				pstmt.setString(1, name);
 				pstmt.setTimestamp(2, modifier);
 				pstmt.setString(3, id);
@@ -45,7 +46,6 @@
 				} else {
 					str = "아이디 또는 패스워드를 확인하세요.";
 				}
-}
 			} catch(Exception e) {
 				e.printStackTrace();
 				str="member 테이블 레코드 변경에 실패했습니다.";
