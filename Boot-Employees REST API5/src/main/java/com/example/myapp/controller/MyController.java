@@ -741,4 +741,25 @@ public class MyController {
     public String showUpdateTestPro() {
         return "updateTestPro";
     }
+    
+    //20250521
+    @GetMapping("/deleteTestForm")
+    public String showDeleteTestForm() {
+        return "deleteTestForm";
+    }
+
+    @PostMapping("/deleteTestPro")
+    public String showDeleteTestPro() {
+        return "deleteTestPro";
+    }
+    
+    @GetMapping("/makeCookie")
+    public String showMakeCookie() {
+        return "makeCookie";
+    }
+
+    @PostMapping("/useCookie")
+    public String showUseCookie() {
+        return "useCookie";
+    }
 }
